@@ -89,6 +89,23 @@
 				<configuration>
 					<release>${jdk}</release>
 				</configuration>
+				<executions>
+					<execution>
+						<id>process-test-annotations</id>
+						<phase>generate-test-resources</phase>
+						<goals>
+							<goal>testCompile</goal>
+						</goals>
+						<configuration>
+							<proc>only</proc>
+							<annotationProcessors>
+								<annotationProcessor>
+									org.jpatterns.validator.AbstractFactoryPatternValidator
+								</annotationProcessor>
+							</annotationProcessors>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
