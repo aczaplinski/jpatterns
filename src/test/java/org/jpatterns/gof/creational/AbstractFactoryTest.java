@@ -12,7 +12,7 @@ public class AbstractFactoryTest {
   private String configuredLocale;
 
   @AbstractFactoryPattern.AbstractProduct(participants = AbstractLocalizedAnimalFactory.class)
-  private static interface LocalizedAnimal {
+  private interface LocalizedAnimal {
     String talk();
   }
 
@@ -45,7 +45,7 @@ public class AbstractFactoryTest {
   }
 
   @AbstractFactoryPattern.AbstractFactory(participants = LocalizedAnimal.class)
-  private static interface AbstractLocalizedAnimalFactory {
+  private interface AbstractLocalizedAnimalFactory {
     @AbstractFactoryPattern.FactoryMethod
     LocalizedAnimal createCat();
 
