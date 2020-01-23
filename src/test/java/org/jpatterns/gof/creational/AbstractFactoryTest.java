@@ -46,8 +46,10 @@ public class AbstractFactoryTest {
 
   @AbstractFactoryPattern.AbstractFactory(participants = LocalizedAnimal.class)
   private static interface AbstractLocalizedAnimalFactory {
+    @AbstractFactoryPattern.FactoryMethod
     LocalizedAnimal createCat();
 
+    @AbstractFactoryPattern.FactoryMethod
     LocalizedAnimal createChicken();
   }
 
@@ -66,10 +68,12 @@ public class AbstractFactoryTest {
 
   @AbstractFactoryPattern.ConcreteFactory
   private static class EnglishAnimalFactory implements AbstractLocalizedAnimalFactory {
+    @AbstractFactoryPattern.FactoryMethod
     public LocalizedAnimal createCat() {
       return new EnglishCat();
     }
 
+    @AbstractFactoryPattern.FactoryMethod
     public LocalizedAnimal createChicken() {
       return new EnglishChicken();
     }
