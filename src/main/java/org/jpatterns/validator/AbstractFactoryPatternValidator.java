@@ -4,10 +4,7 @@ import org.jpatterns.gof.creational.AbstractFactoryPattern;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
@@ -64,6 +61,8 @@ public class AbstractFactoryPatternValidator implements Processor {
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(AbstractFactoryPattern.FactoryMethod.class)) {
+            validateElementModifiersDoNotContain(annotatedElement, AbstractFactoryPattern.FactoryMethod.class,
+                    Modifier.PRIVATE, Modifier.PROTECTED, Modifier.STATIC);
             validateFactoryMethodIsInsideFactory(annotatedElement);
         }
         return false;
@@ -73,6 +72,16 @@ public class AbstractFactoryPatternValidator implements Processor {
     public Iterable<? extends Completion> getCompletions(Element element, AnnotationMirror annotation,
                                                          ExecutableElement member, String userText) {
         return Collections.emptyList();
+    }
+
+    private void validateElementModifiersDoNotContain(Element annotatedElement, Class annotation,
+                                                      Modifier ... modifiers) {
+        Arrays.stream(modifiers)
+                .filter(modifier -> annotatedElement.getModifiers().contains(modifier))
+                .forEach(modifier -> messager.printMessage(Diagnostic.Kind.ERROR,
+                    annotation.getSimpleName() + " must not be " + modifier,
+                    annotatedElement,
+                    getElementAnnotationMirror(annotatedElement, annotation)));
     }
 
     private void validateFactoryMethodIsInsideFactory(Element annotatedFactoryMethod) {
