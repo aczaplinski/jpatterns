@@ -43,19 +43,19 @@ public class AbstractFactoryPatternValidator implements Processor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        System.out.println("PROCESSING " + annotations.size() + "!");
-        System.out.println(annotations);
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(AbstractFactoryPattern.AbstractFactory.class)) {
+            validateIsAbstractClassOrInterface(annotatedElement, AbstractFactoryPattern.AbstractFactory.class);
             validateFactoryContainsFactoryMethod(annotatedElement);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(AbstractFactoryPattern.AbstractProduct.class)) {
+            validateIsAbstractClassOrInterface(annotatedElement, AbstractFactoryPattern.AbstractProduct.class);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(AbstractFactoryPattern.ConcreteFactory.class)) {
-            validateFactoryContainsFactoryMethod(annotatedElement);
             validateIsConcreteClass(annotatedElement, AbstractFactoryPattern.ConcreteFactory.class);
+            validateFactoryContainsFactoryMethod(annotatedElement);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(AbstractFactoryPattern.ConcreteProduct.class)) {
@@ -75,6 +75,27 @@ public class AbstractFactoryPatternValidator implements Processor {
     public Iterable<? extends Completion> getCompletions(Element element, AnnotationMirror annotation,
                                                          ExecutableElement member, String userText) {
         return Collections.emptyList();
+    }
+
+    private void validateIsConcreteClass(Element annotatedType, Class annotation) {
+        if(annotatedType.getKind() == ElementKind.CLASS) {
+            validateElementModifiersDoNotContain(annotatedType, annotation, Modifier.ABSTRACT);
+        } else {
+            messager.printMessage(Diagnostic.Kind.ERROR,
+                    annotation.getSimpleName() + " must not be an interface.",
+                    annotatedType,
+                    getElementAnnotationMirror(annotatedType, annotation));
+        }
+    }
+
+    private void validateIsAbstractClassOrInterface(Element annotatedType, Class annotation) {
+        if(annotatedType.getKind() == ElementKind.CLASS
+                && !annotatedType.getModifiers().contains(Modifier.ABSTRACT)) {
+            messager.printMessage(Diagnostic.Kind.ERROR,
+                    annotation.getSimpleName() + " must be an abstract class or an interface.",
+                    annotatedType,
+                    getElementAnnotationMirror(annotatedType, annotation));
+        }
     }
 
     private void validateElementModifiersDoNotContain(Element annotatedElement, Class annotation,
@@ -123,17 +144,6 @@ public class AbstractFactoryPatternValidator implements Processor {
                     getElementAnnotationMirror(annotatedFactoryMethod,
                             AbstractFactoryPattern.FactoryMethod.class)
                     );
-        }
-    }
-
-    private void validateIsConcreteClass(Element annotatedType, Class annotation) {
-        if(annotatedType.getKind() == ElementKind.CLASS) {
-            validateElementModifiersDoNotContain(annotatedType, annotation, Modifier.ABSTRACT);
-        } else {
-            messager.printMessage(Diagnostic.Kind.ERROR,
-                    annotation.getSimpleName() + " must not be an interface.",
-                    annotatedType,
-                    getElementAnnotationMirror(annotatedType, annotation));
         }
     }
 
