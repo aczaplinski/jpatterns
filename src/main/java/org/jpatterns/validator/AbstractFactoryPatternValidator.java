@@ -55,9 +55,11 @@ public class AbstractFactoryPatternValidator implements Processor {
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(AbstractFactoryPattern.ConcreteFactory.class)) {
             validateFactoryContainsFactoryMethod(annotatedElement);
+            validateIsConcreteClass(annotatedElement, AbstractFactoryPattern.ConcreteFactory.class);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(AbstractFactoryPattern.ConcreteProduct.class)) {
+            validateIsConcreteClass(annotatedElement, AbstractFactoryPattern.ConcreteProduct.class);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(AbstractFactoryPattern.FactoryMethod.class)) {
@@ -121,6 +123,17 @@ public class AbstractFactoryPatternValidator implements Processor {
                     getElementAnnotationMirror(annotatedFactoryMethod,
                             AbstractFactoryPattern.FactoryMethod.class)
                     );
+        }
+    }
+
+    private void validateIsConcreteClass(Element annotatedType, Class annotation) {
+        if(annotatedType.getKind() == ElementKind.CLASS) {
+            validateElementModifiersDoNotContain(annotatedType, annotation, Modifier.ABSTRACT);
+        } else {
+            messager.printMessage(Diagnostic.Kind.ERROR,
+                    annotation.getSimpleName() + " must not be an interface.",
+                    annotatedType,
+                    getElementAnnotationMirror(annotatedType, annotation));
         }
     }
 
