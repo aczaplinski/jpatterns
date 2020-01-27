@@ -64,6 +64,7 @@ public class AbstractFactoryPatternValidator implements Processor {
             validateElementModifiersDoNotContain(annotatedElement, AbstractFactoryPattern.FactoryMethod.class,
                     Modifier.PRIVATE, Modifier.PROTECTED, Modifier.STATIC);
             validateFactoryMethodIsInsideFactory(annotatedElement);
+            validateFactoryMethodReturnsProduct(annotatedElement);
         }
         return false;
     }
@@ -106,6 +107,20 @@ public class AbstractFactoryPatternValidator implements Processor {
                     getElementAnnotationMirror(annotatedFactory,
                             AbstractFactoryPattern.AbstractFactory.class,
                             AbstractFactoryPattern.ConcreteFactory.class));
+        }
+    }
+
+    private void validateFactoryMethodReturnsProduct(Element annotatedFactoryMethod) {
+        Element returnedElement = types.asElement(((ExecutableElement) annotatedFactoryMethod).getReturnType());
+        if(returnedElement.getAnnotation(AbstractFactoryPattern.AbstractProduct.class) == null
+            && returnedElement.getAnnotation(AbstractFactoryPattern.ConcreteProduct.class) == null) {
+            messager.printMessage(Diagnostic.Kind.ERROR,
+                    "Factory Method must return a value of type annotated" +
+                            " with @AbstractProduct or @ConcreteProduct",
+                    annotatedFactoryMethod,
+                    getElementAnnotationMirror(annotatedFactoryMethod,
+                            AbstractFactoryPattern.FactoryMethod.class)
+                    );
         }
     }
 
