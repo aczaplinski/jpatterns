@@ -4,6 +4,8 @@ import org.jpatterns.core.*;
 
 import java.lang.annotation.*;
 
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
+
 /**
  * <b>Intent [GoF, pg 87]:</b> Provide an interface for creating families of
  * related or dependent objects without specifying their concrete classes.
@@ -35,7 +37,7 @@ public @interface AbstractFactoryPattern {
   @Documented
   public @interface AbstractProduct {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
@@ -44,7 +46,7 @@ public @interface AbstractFactoryPattern {
   @Documented
   public @interface ConcreteProduct {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
@@ -53,7 +55,7 @@ public @interface AbstractFactoryPattern {
   @Documented
   public @interface FactoryMethod {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
@@ -62,7 +64,7 @@ public @interface AbstractFactoryPattern {
   @Documented
   public @interface AbstractFactory {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
@@ -71,7 +73,7 @@ public @interface AbstractFactoryPattern {
   @Documented
   public @interface ConcreteFactory {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 } 

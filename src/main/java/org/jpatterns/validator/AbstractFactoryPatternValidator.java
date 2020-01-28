@@ -1,5 +1,6 @@
 package org.jpatterns.validator;
 
+import org.jpatterns.core.ValidationErrorLevel;
 import org.jpatterns.gof.creational.AbstractFactoryPattern;
 
 import javax.annotation.processing.*;
@@ -7,7 +8,8 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.*;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
-import javax.tools.Diagnostic;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -77,35 +79,35 @@ public class AbstractFactoryPatternValidator implements Processor {
         return Collections.emptyList();
     }
 
-    private void validateIsConcreteClass(Element annotatedType, Class annotation) {
+    private void validateIsConcreteClass(Element annotatedType,
+                                         Class<? extends Annotation> annotation) {
         if(annotatedType.getKind() == ElementKind.CLASS) {
             validateElementModifiersDoNotContain(annotatedType, annotation, Modifier.ABSTRACT);
         } else {
-            messager.printMessage(Diagnostic.Kind.ERROR,
-                    annotation.getSimpleName() + " must not be an interface.",
+            printMessage(annotation.getSimpleName() + " %1$s not be an interface.",
                     annotatedType,
-                    getElementAnnotationMirror(annotatedType, annotation));
+                    annotation);
         }
     }
 
-    private void validateIsAbstractClassOrInterface(Element annotatedType, Class annotation) {
+    private void validateIsAbstractClassOrInterface(Element annotatedType,
+                                                    Class<? extends Annotation> annotation) {
         if(annotatedType.getKind() == ElementKind.CLASS
                 && !annotatedType.getModifiers().contains(Modifier.ABSTRACT)) {
-            messager.printMessage(Diagnostic.Kind.ERROR,
-                    annotation.getSimpleName() + " must be an abstract class or an interface.",
+            printMessage(annotation.getSimpleName() + " %1$s be an abstract class or an interface.",
                     annotatedType,
-                    getElementAnnotationMirror(annotatedType, annotation));
+                    annotation);
         }
     }
 
-    private void validateElementModifiersDoNotContain(Element annotatedElement, Class annotation,
+    private void validateElementModifiersDoNotContain(Element annotatedElement,
+                                                      Class<? extends Annotation> annotation,
                                                       Modifier ... modifiers) {
         Arrays.stream(modifiers)
                 .filter(modifier -> annotatedElement.getModifiers().contains(modifier))
-                .forEach(modifier -> messager.printMessage(Diagnostic.Kind.ERROR,
-                    annotation.getSimpleName() + " must not be " + modifier,
+                .forEach(modifier -> printMessage(annotation.getSimpleName() + " %1$s not be " + modifier,
                     annotatedElement,
-                    getElementAnnotationMirror(annotatedElement, annotation)));
+                    annotation));
     }
 
     private void validateFactoryMethodIsInsideFactory(Element annotatedFactoryMethod) {
@@ -113,9 +115,10 @@ public class AbstractFactoryPatternValidator implements Processor {
                 == null
             && annotatedFactoryMethod.getEnclosingElement().getAnnotation(AbstractFactoryPattern.ConcreteFactory.class)
                 == null) {
-            messager.printMessage(Diagnostic.Kind.ERROR, "Factory Method must reside in a class or interface" +
-                    " annotated with either @AbstractFactory or @ConcreteFactory", annotatedFactoryMethod,
-                    getElementAnnotationMirror(annotatedFactoryMethod, AbstractFactoryPattern.FactoryMethod.class));
+            printMessage("Factory Method %1$s reside in a class or interface" +
+                    " annotated with either @AbstractFactory or @ConcreteFactory",
+                    annotatedFactoryMethod,
+                    AbstractFactoryPattern.FactoryMethod.class);
         }
     }
 
@@ -124,12 +127,10 @@ public class AbstractFactoryPatternValidator implements Processor {
                 .stream()
                 .noneMatch(potentialFactoryMethod ->
                         potentialFactoryMethod.getAnnotation(AbstractFactoryPattern.FactoryMethod.class) != null)) {
-            messager.printMessage(Diagnostic.Kind.ERROR,
-                    "Factory must contain a method annotated with @FactoryMethod",
+            printMessage("Factory %1$s contain a method annotated with @FactoryMethod",
                     annotatedFactory,
-                    getElementAnnotationMirror(annotatedFactory,
-                            AbstractFactoryPattern.AbstractFactory.class,
-                            AbstractFactoryPattern.ConcreteFactory.class));
+                    AbstractFactoryPattern.AbstractFactory.class,
+                    AbstractFactoryPattern.ConcreteFactory.class);
         }
     }
 
@@ -137,17 +138,40 @@ public class AbstractFactoryPatternValidator implements Processor {
         Element returnedElement = types.asElement(((ExecutableElement) annotatedFactoryMethod).getReturnType());
         if(returnedElement.getAnnotation(AbstractFactoryPattern.AbstractProduct.class) == null
             && returnedElement.getAnnotation(AbstractFactoryPattern.ConcreteProduct.class) == null) {
-            messager.printMessage(Diagnostic.Kind.ERROR,
-                    "Factory Method must return a value of type annotated" +
+            printMessage("Factory Method %1$s return a value of type annotated" +
                             " with @AbstractProduct or @ConcreteProduct",
                     annotatedFactoryMethod,
-                    getElementAnnotationMirror(annotatedFactoryMethod,
-                            AbstractFactoryPattern.FactoryMethod.class)
-                    );
+                    AbstractFactoryPattern.FactoryMethod.class);
         }
     }
 
-    private AnnotationMirror getElementAnnotationMirror(Element annotatedElement, Class ... annotations) {
+    /** Generates a compiler message of appropriate level.
+     * Replaces all occurrences of "%1$s" in the message
+     * with a verb like must or should.
+     * annotations must contain a class representing an annotation present on
+     * annotatedElement. The generated message will point to it. */
+    @SafeVarargs
+    private void printMessage(String message,
+                              Element annotatedElement,
+                              Class<? extends Annotation> ... annotations) {
+        Class<? extends Annotation> annotationPresent = Arrays.stream(annotations)
+                .filter(annotation -> annotatedElement.getAnnotation(annotation) != null)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Supplied Element is not annotated with any of the given annotations"));
+        ValidationErrorLevel validationErrorLevel = getValidationErrorLevel(annotatedElement, annotationPresent);
+        if(validationErrorLevel != ValidationErrorLevel.NONE) {
+            messager.printMessage(validationErrorLevel.getDiagnosticKind(),
+                    String.format(message, validationErrorLevel.getMessageVerb()),
+                    annotatedElement,
+                    getElementAnnotationMirror(annotatedElement,
+                            annotationPresent));
+        }
+    }
+
+    @SafeVarargs
+    private AnnotationMirror getElementAnnotationMirror(Element annotatedElement,
+                                                        Class<? extends Annotation> ... annotations) {
         List<String> annotationQualifiedNames = Arrays.stream(annotations)
                 .map(annotation -> annotation.getName().replace('$', '.'))
                 .collect(Collectors.toList());
@@ -160,5 +184,18 @@ public class AbstractFactoryPatternValidator implements Processor {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Supplied Element is not annotated with any of the given annotations"));
+    }
+
+    private ValidationErrorLevel getValidationErrorLevel(Element annotatedElement,
+                                                         Class<? extends  Annotation> annotation) {
+        try {
+            /* Annotations cannot extend nor implement anything, so there is no way to specify a common interface
+                containing method validationErrorLevel(). That's why reflection is used here.
+             */
+            return (ValidationErrorLevel) annotation.getMethod("validationErrorLevel")
+                    .invoke(annotatedElement.getAnnotation(annotation));
+        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            throw new RuntimeException("Could not retrieve validation error level", e);
+        }
     }
 }
