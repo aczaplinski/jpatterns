@@ -35,7 +35,7 @@ public @interface AbstractFactoryPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface AbstractProduct {
+  @interface AbstractProduct {
     Class[] participants() default {};
     ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
@@ -44,7 +44,7 @@ public @interface AbstractFactoryPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ConcreteProduct {
+  @interface ConcreteProduct {
     Class[] participants() default {};
     ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
@@ -53,7 +53,7 @@ public @interface AbstractFactoryPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.METHOD)
   @Documented
-  public @interface FactoryMethod {
+  @interface FactoryMethod {
     Class[] participants() default {};
     ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
@@ -62,7 +62,7 @@ public @interface AbstractFactoryPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface AbstractFactory {
+  @interface AbstractFactory {
     Class[] participants() default {};
     ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
@@ -71,7 +71,7 @@ public @interface AbstractFactoryPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ConcreteFactory {
+  @interface ConcreteFactory {
     Class[] participants() default {};
     ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
