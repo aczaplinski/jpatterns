@@ -44,6 +44,7 @@ public class AbstractFactoryPatternValidator {
                     AbstractFactoryPattern.FactoryMethod.class,
                     Modifier.PRIVATE, Modifier.PROTECTED, Modifier.STATIC);
             validateFactoryMethodIsInsideFactory(annotatedElement);
+            validateFactoryIsAbstractOrFactoryMethodHasOverride(annotatedElement);
             validateFactoryMethodReturnsProduct(annotatedElement);
         }
     }
@@ -57,6 +58,18 @@ public class AbstractFactoryPatternValidator {
                 == null) {
             validatorUtils.printMessage("Factory Method %1$s reside in a class or interface" +
                             " annotated with either @AbstractFactory or @ConcreteFactory",
+                    annotatedFactoryMethod,
+                    AbstractFactoryPattern.FactoryMethod.class);
+        }
+    }
+
+    private void validateFactoryIsAbstractOrFactoryMethodHasOverride(Element annotatedFactoryMethod) {
+        if(annotatedFactoryMethod.getEnclosingElement()
+                .getAnnotation(AbstractFactoryPattern.ConcreteFactory.class)
+                != null
+        && annotatedFactoryMethod.getAnnotation(Override.class) == null) {
+            validatorUtils.printMessage("Factory Method in Concrete Factory %1$s override" +
+                    " a Factory Method from its superclass, so it %1$s also be annotated with @Override",
                     annotatedFactoryMethod,
                     AbstractFactoryPattern.FactoryMethod.class);
         }
