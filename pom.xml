@@ -100,8 +100,8 @@
 							<proc>only</proc>
 							<annotationProcessors>
 								<annotationProcessor>
-									org.jpatterns.validator.AbstractFactoryPatternValidator
-								</annotationProcessor>
+                                    org.jpatterns.validator.PatternValidatingAnnotationProcessor
+                                </annotationProcessor>
 							</annotationProcessors>
 						</configuration>
 					</execution>
