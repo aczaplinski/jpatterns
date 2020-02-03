@@ -108,6 +108,10 @@ public class ValidatorUtils {
         }
     }
 
+    public Element getReturnedElement(ExecutableElement methodExecutableElement) {
+        return types.asElement(methodExecutableElement.getReturnType());
+    }
+
     @SafeVarargs
     private AnnotationMirror getElementAnnotationMirror(Element annotatedElement,
                                                         Class<? extends Annotation> ... annotations) {

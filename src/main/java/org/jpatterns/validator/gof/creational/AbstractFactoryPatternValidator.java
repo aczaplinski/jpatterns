@@ -97,10 +97,11 @@ public class AbstractFactoryPatternValidator implements PatternValidator {
     }
 
     private void validateFactoryMethodReturnsProduct(Element annotatedFactoryMethod) {
-        Element returnedElement = validatorUtils.getTypes()
-                .asElement(((ExecutableElement) annotatedFactoryMethod).getReturnType());
-        if(returnedElement.getAnnotation(AbstractFactoryPattern.AbstractProduct.class) == null
-                && returnedElement.getAnnotation(AbstractFactoryPattern.ConcreteProduct.class) == null) {
+        Element returnedElement = validatorUtils.getReturnedElement(
+                (ExecutableElement) annotatedFactoryMethod);
+        if(returnedElement == null
+                || (returnedElement.getAnnotation(AbstractFactoryPattern.AbstractProduct.class) == null
+                    && returnedElement.getAnnotation(AbstractFactoryPattern.ConcreteProduct.class) == null)) {
             validatorUtils.printMessage("Factory Method %1$s return a value of type annotated" +
                             " with @AbstractProduct or @ConcreteProduct",
                     annotatedFactoryMethod,

@@ -5,6 +5,8 @@ import org.jpatterns.gof.structural.CompositePattern;
 
 import java.lang.annotation.*;
 
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
+
 /**
  * <b>Intent [GoF, pg 97]:</b> Separate the construction of a complex object
  * from its representation so that the same construction process can create
@@ -32,7 +34,7 @@ public @interface BuilderPattern {
   @Documented
   @interface Director {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
@@ -41,7 +43,7 @@ public @interface BuilderPattern {
   @Documented
   @interface Builder {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
@@ -50,7 +52,7 @@ public @interface BuilderPattern {
   @Documented
   @interface ConcreteBuilder {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
