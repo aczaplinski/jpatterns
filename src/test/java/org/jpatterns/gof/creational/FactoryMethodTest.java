@@ -11,19 +11,19 @@ import java.util.*;
 public class FactoryMethodTest {
 
   @FactoryMethodPattern.Product(participants = NumberPrinter.class)
-  private static interface NumberGenerator {
-    public int next();
+  private interface NumberGenerator {
+    int next();
   }
 
   @FactoryMethodPattern.Creator(participants = NumberGenerator.class)
   private static abstract class NumberPrinter {
 
     public void printNumbers(int _upto) {
-      Collection<Integer> result = new ArrayList<Integer>();
+      Collection<Integer> result = new ArrayList<>();
       NumberGenerator numberGenerator = createNumberGenerator();
       int curNum = numberGenerator.next();
       while (curNum < _upto) {
-        result.add(Integer.valueOf(curNum));
+        result.add(curNum);
         curNum = numberGenerator.next();
       }
       System.out.println(result);
