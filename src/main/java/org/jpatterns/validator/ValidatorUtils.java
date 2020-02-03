@@ -59,7 +59,8 @@ public class ValidatorUtils {
                                                       Modifier ... modifiers) {
         Arrays.stream(modifiers)
                 .filter(modifier -> annotatedElement.getModifiers().contains(modifier))
-                .forEach(modifier -> printMessage(annotation.getSimpleName() + " %1$s not be " + modifier,
+                .forEach(modifier -> printMessage(
+                        annotation.getSimpleName() + " %1$s not be " + modifier + ".",
                         annotatedElement,
                         annotation));
     }
