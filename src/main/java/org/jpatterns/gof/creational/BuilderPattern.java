@@ -30,7 +30,7 @@ public @interface BuilderPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Director {
+  @interface Director {
     Class[] participants() default {};
 
     String comment() default "";
@@ -39,7 +39,7 @@ public @interface BuilderPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Builder {
+  @interface Builder {
     Class[] participants() default {};
 
     String comment() default "";
@@ -48,7 +48,7 @@ public @interface BuilderPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ConcreteBuilder {
+  @interface ConcreteBuilder {
     Class[] participants() default {};
 
     String comment() default "";
@@ -57,7 +57,7 @@ public @interface BuilderPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Product {
+  @interface Product {
     Class[] participants() default {};
 
     String comment() default "";
