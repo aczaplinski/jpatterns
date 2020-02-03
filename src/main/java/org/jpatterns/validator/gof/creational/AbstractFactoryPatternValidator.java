@@ -1,6 +1,7 @@
 package org.jpatterns.validator.gof.creational;
 
 import org.jpatterns.gof.creational.AbstractFactoryPattern;
+import org.jpatterns.validator.PatternValidator;
 import org.jpatterns.validator.ValidatorUtils;
 
 import javax.annotation.processing.RoundEnvironment;
@@ -8,7 +9,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 
-public class AbstractFactoryPatternValidator {
+public class AbstractFactoryPatternValidator implements PatternValidator {
     private ValidatorUtils validatorUtils;
 
     public AbstractFactoryPatternValidator(ValidatorUtils validatorUtils) {

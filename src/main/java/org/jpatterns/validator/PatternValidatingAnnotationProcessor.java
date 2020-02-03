@@ -12,14 +12,16 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 public class PatternValidatingAnnotationProcessor implements Processor {
-    private ValidatorUtils validatorUtils;
+    private List<PatternValidator> patternValidators;
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
-        validatorUtils = new ValidatorUtils(processingEnv);
+        ValidatorUtils validatorUtils = new ValidatorUtils(processingEnv);
+        patternValidators = List.of(new AbstractFactoryPatternValidator(validatorUtils));
     }
 
     @Override
@@ -39,8 +41,7 @@ public class PatternValidatingAnnotationProcessor implements Processor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        new AbstractFactoryPatternValidator(validatorUtils).process(roundEnv);
-
+        patternValidators.forEach(patternValidator -> patternValidator.process(roundEnv));
         return false;
     }
 
