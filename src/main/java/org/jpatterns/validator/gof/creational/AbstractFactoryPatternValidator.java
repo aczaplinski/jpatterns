@@ -31,12 +31,20 @@ public class AbstractFactoryPatternValidator {
                 roundEnv.getElementsAnnotatedWith(AbstractFactoryPattern.ConcreteFactory.class)) {
             validatorUtils.validateIsConcreteClass(annotatedElement,
                     AbstractFactoryPattern.ConcreteFactory.class);
+            validatorUtils.validateSomeSupertypeIsAnnotatedWithAnyOf(annotatedElement,
+                    AbstractFactoryPattern.ConcreteFactory.class,
+                    AbstractFactoryPattern.ConcreteFactory.class,
+                    AbstractFactoryPattern.AbstractFactory.class);
             validateFactoryContainsFactoryMethod(annotatedElement);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(AbstractFactoryPattern.ConcreteProduct.class)) {
             validatorUtils.validateIsConcreteClass(annotatedElement,
                     AbstractFactoryPattern.ConcreteProduct.class);
+            validatorUtils.validateSomeSupertypeIsAnnotatedWithAnyOf(annotatedElement,
+                    AbstractFactoryPattern.ConcreteProduct.class,
+                    AbstractFactoryPattern.ConcreteProduct.class,
+                    AbstractFactoryPattern.AbstractProduct.class);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(AbstractFactoryPattern.FactoryMethod.class)) {

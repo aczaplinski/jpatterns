@@ -5,6 +5,7 @@ import org.jpatterns.core.ValidationErrorLevel;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.*;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import java.lang.annotation.Annotation;
@@ -63,6 +64,23 @@ public class ValidatorUtils {
                         annotation));
     }
 
+    @SafeVarargs
+    public final void validateSomeSupertypeIsAnnotatedWithAnyOf(
+            Element annotatedType,
+            Class<? extends Annotation> annotation,
+            Class<? extends Annotation> ... allowedSupertypeAnnotations) {
+        if(types.directSupertypes(annotatedType.asType()).stream()
+                .noneMatch(superTypeMirror -> isAnnotatedWithAnyOf(
+                        superTypeMirror, allowedSupertypeAnnotations))) {
+            printMessage(annotation.getSimpleName()
+                            + " %1$s be a subtype of one of: "
+                            + toString(allowedSupertypeAnnotations)
+                            + ".",
+                    annotatedType,
+                    annotation);
+        }
+    }
+
     /** Generates a compiler message of appropriate level.
      * Replaces all occurrences of "%1$s" in the message
      * with a verb like must or should.
@@ -118,5 +136,22 @@ public class ValidatorUtils {
         } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new RuntimeException("Could not retrieve validation error level", e);
         }
+    }
+
+    private boolean isAnnotatedWithAnyOf(TypeMirror typeMirror, Class<? extends Annotation>[] annotations) {
+        /* typeMirror.getAnnotation(<Class<A>>) returns null even if the annotation is present,
+           so is it converted to Element and the Element taking version of the method is used */
+        return isAnnotatedWithAnyOf(types.asElement(typeMirror), annotations);
+    }
+
+    private boolean isAnnotatedWithAnyOf(Element element, Class<? extends Annotation>[] annotations) {
+        return Arrays.stream(annotations)
+                .anyMatch(annotation -> element.getAnnotation(annotation) != null);
+    }
+
+    private String toString(Class<? extends Annotation>[] annotations) {
+        return Arrays.stream(annotations)
+                .map(Class::getSimpleName)
+                .collect(Collectors.joining(", "));
     }
 }
