@@ -1,6 +1,7 @@
 package org.jpatterns.validator;
 
 import org.jpatterns.validator.gof.creational.AbstractFactoryPatternValidator;
+import org.jpatterns.validator.gof.creational.BuilderPatternValidator;
 
 import javax.annotation.processing.Completion;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -21,7 +22,9 @@ public class PatternValidatingAnnotationProcessor implements Processor {
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         ValidatorUtils validatorUtils = new ValidatorUtils(processingEnv);
-        patternValidators = List.of(new AbstractFactoryPatternValidator(validatorUtils));
+        patternValidators = List.of(
+                new AbstractFactoryPatternValidator(validatorUtils),
+                new BuilderPatternValidator(validatorUtils));
     }
 
     @Override
