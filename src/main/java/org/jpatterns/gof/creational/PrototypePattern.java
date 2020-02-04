@@ -29,7 +29,7 @@ public @interface PrototypePattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Prototype {
+  @interface Prototype {
     Class[] participants() default {};
 
     String comment() default "";
@@ -38,7 +38,7 @@ public @interface PrototypePattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ConcretePrototype {
+  @interface ConcretePrototype {
     Class[] participants() default {};
 
     String comment() default "";
@@ -47,7 +47,7 @@ public @interface PrototypePattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.METHOD)
   @Documented
-  public @interface Operation {
+  @interface Operation {
     Class[] participants() default {};
 
     String comment() default "";
