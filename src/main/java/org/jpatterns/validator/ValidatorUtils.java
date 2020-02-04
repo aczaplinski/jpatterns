@@ -54,9 +54,20 @@ public class ValidatorUtils {
         }
     }
 
+    public void validateElementModifiersContain(Element annotatedElement,
+                                                Class<? extends Annotation> annotation,
+                                                Modifier ... modifiers) {
+        Arrays.stream(modifiers)
+                .filter(modifier -> !annotatedElement.getModifiers().contains(modifier))
+                .forEach(modifier -> printMessage(
+                        annotation.getSimpleName() + " %1$s be " + modifier + ".",
+                        annotatedElement,
+                        annotation));
+    }
+
     public void validateElementModifiersDoNotContain(Element annotatedElement,
-                                                      Class<? extends Annotation> annotation,
-                                                      Modifier ... modifiers) {
+                                                     Class<? extends Annotation> annotation,
+                                                     Modifier ... modifiers) {
         Arrays.stream(modifiers)
                 .filter(modifier -> annotatedElement.getModifiers().contains(modifier))
                 .forEach(modifier -> printMessage(
@@ -78,6 +89,22 @@ public class ValidatorUtils {
                             + toString(allowedSupertypeAnnotations)
                             + ".",
                     annotatedType,
+                    annotation);
+        }
+    }
+
+    public void validateTypeContainsElementAnnotatedWith(Element annotatedElement,
+                                                         Class<? extends Annotation> annotation,
+                                                         Class<? extends Annotation> subelementAnnotation) {
+        if(annotatedElement.getEnclosedElements()
+                .stream()
+                .noneMatch(potentialAnnotatedSubelement ->
+                        potentialAnnotatedSubelement.getAnnotation(subelementAnnotation) != null)) {
+            printMessage(annotation.getSimpleName()
+                            + " %1$s contain a "
+                            + subelementAnnotation.getSimpleName()
+                            + ".",
+                    annotatedElement,
                     annotation);
         }
     }

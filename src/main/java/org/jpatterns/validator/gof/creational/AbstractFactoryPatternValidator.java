@@ -21,7 +21,9 @@ public class AbstractFactoryPatternValidator implements PatternValidator {
                 roundEnv.getElementsAnnotatedWith(AbstractFactoryPattern.AbstractFactory.class)) {
             validatorUtils.validateIsAbstractClassOrInterface(annotatedElement,
                     AbstractFactoryPattern.AbstractFactory.class);
-            validateFactoryContainsFactoryMethod(annotatedElement);
+            validatorUtils.validateTypeContainsElementAnnotatedWith(annotatedElement,
+                    AbstractFactoryPattern.AbstractFactory.class,
+                    AbstractFactoryPattern.FactoryMethod.class);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(AbstractFactoryPattern.AbstractProduct.class)) {
@@ -36,7 +38,9 @@ public class AbstractFactoryPatternValidator implements PatternValidator {
                     AbstractFactoryPattern.ConcreteFactory.class,
                     AbstractFactoryPattern.ConcreteFactory.class,
                     AbstractFactoryPattern.AbstractFactory.class);
-            validateFactoryContainsFactoryMethod(annotatedElement);
+            validatorUtils.validateTypeContainsElementAnnotatedWith(annotatedElement,
+                    AbstractFactoryPattern.ConcreteFactory.class,
+                    AbstractFactoryPattern.FactoryMethod.class);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(AbstractFactoryPattern.ConcreteProduct.class)) {
@@ -81,18 +85,6 @@ public class AbstractFactoryPatternValidator implements PatternValidator {
                     " a Factory Method from its superclass, so it %1$s also be annotated with @Override",
                     annotatedFactoryMethod,
                     AbstractFactoryPattern.FactoryMethod.class);
-        }
-    }
-
-    private void validateFactoryContainsFactoryMethod(Element annotatedFactory) {
-        if(annotatedFactory.getEnclosedElements()
-                .stream()
-                .noneMatch(potentialFactoryMethod ->
-                        potentialFactoryMethod.getAnnotation(AbstractFactoryPattern.FactoryMethod.class) != null)) {
-            validatorUtils.printMessage("Factory %1$s contain a method annotated with @FactoryMethod",
-                    annotatedFactory,
-                    AbstractFactoryPattern.AbstractFactory.class,
-                    AbstractFactoryPattern.ConcreteFactory.class);
         }
     }
 
