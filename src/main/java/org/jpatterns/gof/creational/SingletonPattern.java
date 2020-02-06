@@ -1,9 +1,10 @@
 package org.jpatterns.gof.creational;
 
 import org.jpatterns.core.*;
-import org.jpatterns.gof.creational.*;
 
 import java.lang.annotation.*;
+
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
 
 /**
  * <b>Intent [GoF, pg 127]:</b> Ensure a class only has one instance, and
@@ -31,9 +32,9 @@ public @interface SingletonPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Singleton {
+  @interface Singleton {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
 
     Variation variation() default Variation.LAZY;
@@ -42,13 +43,13 @@ public @interface SingletonPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.METHOD)
   @Documented
-  public @interface SingletonMethod {
+  @interface SingletonMethod {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
-  public enum Variation {
+  enum Variation {
     LAZY, EAGER
   }
 }
