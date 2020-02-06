@@ -93,6 +93,18 @@ public class ValidatorUtils {
         }
     }
 
+    public void validateImplementsSomeInterface(Element annotatedType, Class<? extends Annotation> annotation) {
+        if(types.directSupertypes(annotatedType.asType())
+                .stream()
+                .noneMatch(typeMirror -> types.asElement(typeMirror)
+                        .getKind() == ElementKind.INTERFACE)) {
+            printMessage(annotation.getSimpleName()
+                            + " %1$s implement some interface.",
+                    annotatedType,
+                    annotation);
+        }
+    }
+
     public void validateTypeContainsElementAnnotatedWith(Element annotatedElement,
                                                          Class<? extends Annotation> annotation,
                                                          Class<? extends Annotation> subelementAnnotation) {

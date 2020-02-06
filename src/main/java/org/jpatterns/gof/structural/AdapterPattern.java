@@ -4,6 +4,8 @@ import org.jpatterns.core.*;
 
 import java.lang.annotation.*;
 
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
+
 /**
  * <b>Intent [GoF, pg 139]:</b> Convert the interface of a class into another
  * interface clients expect. Adapter lets classes work together that couldn't
@@ -38,9 +40,9 @@ public @interface AdapterPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Adapter {
+  @interface Adapter {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
 
     Variation value() default Variation.OBJECT;
@@ -53,13 +55,13 @@ public @interface AdapterPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Adaptee {
+  @interface Adaptee {
     Class[] participants() default {};
 
     String comment() default "";
   }
 
-  public enum Variation {
+  enum Variation {
     OBJECT,
     CLASS,
     /**
