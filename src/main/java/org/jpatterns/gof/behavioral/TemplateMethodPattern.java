@@ -57,20 +57,6 @@ public @interface TemplateMethodPattern {
     String comment() default "";
   }
 
-
-  /**
-   * @deprecated Misnamed, please use @PrimitiveOperation instead.
-   */
-  @Deprecated
-  @Retention(RetentionPolicy.RUNTIME)
-  @Target(ElementType.METHOD)
-  @Documented
-  public @interface PrimitiveMethod {
-    Class[] participants() default {};
-
-    String comment() default "";
-  }
-
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.METHOD)
   @Documented
