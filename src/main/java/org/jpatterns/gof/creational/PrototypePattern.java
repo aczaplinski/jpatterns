@@ -5,6 +5,8 @@ import org.jpatterns.gof.structural.*;
 
 import java.lang.annotation.*;
 
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
+
 /**
  * <b>Intent [GoF, pg 117]:</b> Specify the kinds of objects to create using a
  * prototypical instance, and create new objects by copying this prototype.
@@ -31,7 +33,7 @@ public @interface PrototypePattern {
   @Documented
   @interface Prototype {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
@@ -40,7 +42,7 @@ public @interface PrototypePattern {
   @Documented
   @interface ConcretePrototype {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
