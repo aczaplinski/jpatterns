@@ -2,9 +2,10 @@ package org.jpatterns.gof.structural;
 
 import org.jpatterns.core.*;
 import org.jpatterns.gof.creational.AbstractFactoryPattern;
-import org.jpatterns.gof.structural.AdapterPattern;
 
 import java.lang.annotation.*;
+
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
 
 /**
  * <b>Intent [GoF, pg 151]:</b> Decouple an abstraction from its implementation
@@ -32,36 +33,36 @@ public @interface BridgePattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Abstraction {
+  @interface Abstraction {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface RefinedAbstraction {
+  @interface RefinedAbstraction {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Implementor {
+  @interface Implementor {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ConcreteImplementor {
+  @interface ConcreteImplementor {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 }

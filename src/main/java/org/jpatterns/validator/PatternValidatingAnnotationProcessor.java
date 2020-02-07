@@ -2,6 +2,7 @@ package org.jpatterns.validator;
 
 import org.jpatterns.validator.gof.creational.*;
 import org.jpatterns.validator.gof.structural.AdapterPatternValidator;
+import org.jpatterns.validator.gof.structural.BridgePatternValidator;
 
 import javax.annotation.processing.Completion;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -28,7 +29,8 @@ public class PatternValidatingAnnotationProcessor implements Processor {
                 new FactoryMethodPatternValidator(validatorUtils),
                 new PrototypePatternValidator(validatorUtils),
                 new SingletonPatternValidator(validatorUtils),
-                new AdapterPatternValidator(validatorUtils));
+                new AdapterPatternValidator(validatorUtils),
+                new BridgePatternValidator(validatorUtils));
     }
 
     @Override

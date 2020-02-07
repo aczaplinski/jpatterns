@@ -15,7 +15,7 @@ public class BridgeTest {
   ListImplementor list2;
 
   @BridgePattern.Implementor(participants = ListLayout.class)
-  private static interface ListImplementor {
+  private interface ListImplementor {
     int getSize();
 
     String getItem(int _index);
@@ -25,7 +25,7 @@ public class BridgeTest {
 
   @BridgePattern.ConcreteImplementor
   private static class SomeList implements ListImplementor {
-    private List<String> items = new ArrayList<String>();
+    private List<String> items = new ArrayList<>();
 
     public int getSize() {
       return items.size();
