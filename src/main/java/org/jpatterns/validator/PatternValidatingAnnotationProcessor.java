@@ -3,6 +3,7 @@ package org.jpatterns.validator;
 import org.jpatterns.validator.gof.creational.*;
 import org.jpatterns.validator.gof.structural.AdapterPatternValidator;
 import org.jpatterns.validator.gof.structural.BridgePatternValidator;
+import org.jpatterns.validator.gof.structural.CompositePatternValidator;
 
 import javax.annotation.processing.Completion;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -30,7 +31,8 @@ public class PatternValidatingAnnotationProcessor implements Processor {
                 new PrototypePatternValidator(validatorUtils),
                 new SingletonPatternValidator(validatorUtils),
                 new AdapterPatternValidator(validatorUtils),
-                new BridgePatternValidator(validatorUtils));
+                new BridgePatternValidator(validatorUtils),
+                new CompositePatternValidator(validatorUtils));
     }
 
     @Override
