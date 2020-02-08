@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class DecoratorTest {
   @DecoratorPattern.Component(participants = HTMLDecorator.class)
-  private static interface HTMLContent {
+  private interface HTMLContent {
     String getContent();
   }
 
