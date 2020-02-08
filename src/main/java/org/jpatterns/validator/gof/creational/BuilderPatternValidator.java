@@ -23,8 +23,9 @@ public class BuilderPatternValidator implements PatternValidator {
                 roundEnv.getElementsAnnotatedWith(BuilderPattern.Builder.class)) {
             validatorUtils.validateIsAbstractClassOrInterface(annotatedElement,
                     BuilderPattern.Builder.class);
-            validateContainsMethodReturningProduct(annotatedElement,
-                    BuilderPattern.Builder.class);
+            validatorUtils.validateContainsMethodReturningTypeAnnotated(annotatedElement,
+                    BuilderPattern.Builder.class,
+                    BuilderPattern.Product.class);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(BuilderPattern.ConcreteBuilder.class)) {
@@ -34,33 +35,16 @@ public class BuilderPatternValidator implements PatternValidator {
                     BuilderPattern.ConcreteBuilder.class,
                     BuilderPattern.ConcreteBuilder.class,
                     BuilderPattern.Builder.class);
-            validateContainsMethodReturningProduct(annotatedElement,
-                    BuilderPattern.ConcreteBuilder.class);
+            validatorUtils.validateContainsMethodReturningTypeAnnotated(annotatedElement,
+                    BuilderPattern.ConcreteBuilder.class,
+                    BuilderPattern.Product.class);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(BuilderPattern.Director.class)) {
-            validateContainsMethodReturningProduct(annotatedElement,
-                    BuilderPattern.Director.class);
+            validatorUtils.validateContainsMethodReturningTypeAnnotated(annotatedElement,
+                    BuilderPattern.Director.class,
+                    BuilderPattern.Product.class);
         }
-    }
-
-    private void validateContainsMethodReturningProduct(Element annotatedElement,
-                                                        Class<? extends Annotation> annotation) {
-        if(annotatedElement.getEnclosedElements()
-                .stream()
-                .noneMatch(this::isMethodReturningProduct)) {
-            validatorUtils.printMessage(
-                    annotation.getSimpleName() + " %1$s contain a method returning Product.",
-                    annotatedElement,
-                    annotation);
-        }
-    }
-
-    private boolean isMethodReturningProduct(Element element) {
-        return element.getKind() == ElementKind.METHOD
-               && Optional.ofNullable(validatorUtils.getReturnedElement((ExecutableElement) element))
-                    .map(returnedElement -> returnedElement.getAnnotation(BuilderPattern.Product.class))
-                    .isPresent();
     }
 
 }

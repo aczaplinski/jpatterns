@@ -7,8 +7,7 @@ import java.lang.ref.WeakReference;
 import java.util.*;
 
 import static junit.framework.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Alex Gout
@@ -32,7 +31,7 @@ public class FlyweightTest {
   @FlyweightPattern.ConcreteFlyweight(participants = {Alien.class, KnownAlien.class})
   @FlyweightPattern.FlyweightFactory(participants = {Alien.class, KnownAlien.class})
   private static class AnonymousAlien implements Alien {
-    private static final Map<Alien, WeakReference<Alien>> anonymousAliens = new HashMap<Alien, WeakReference<Alien>>();
+    private static final Map<Alien, WeakReference<Alien>> anonymousAliens = new HashMap<>();
 
     private Color color;
     private AlienRace alienRace;
@@ -52,7 +51,7 @@ public class FlyweightTest {
       Alien alien = null;
       if (ref == null) {
         alien = tmp;
-        anonymousAliens.put(alien, new WeakReference<Alien>(alien));
+        anonymousAliens.put(alien, new WeakReference<>(alien));
       } else {
         alien = ref.get();
       }
@@ -68,12 +67,16 @@ public class FlyweightTest {
         return false;
       }
       AnonymousAlien that = (AnonymousAlien) _object;
-      return (this.color == that.color) && (this.alienRace == that.alienRace) && (this.approximatePlaceOfBirth == that.approximatePlaceOfBirth);
+      return (this.color == that.color) &&
+              (this.alienRace == that.alienRace) &&
+              (this.approximatePlaceOfBirth == that.approximatePlaceOfBirth);
     }
 
     @Override
     public int hashCode() {
-      return (this.color.hashCode() * 13 + this.alienRace.hashCode() * 31) * this.approximatePlaceOfBirth.hashCode() * 11;
+      return (this.color.hashCode() * 13 +
+              this.alienRace.hashCode()) * 31 +
+              this.approximatePlaceOfBirth.hashCode();
     }
 
     public String getName() {
@@ -102,11 +105,14 @@ public class FlyweightTest {
 
   @Test
   public void testAnonymousAlien() {
-    Alien alien = AnonymousAlien.getAnonymousAlienForKnownData(Color.BLUE, AlienRace.Krikkiters, Location.EroticonVI);
-    Alien otherAlienSame = AnonymousAlien.getAnonymousAlienForKnownData(Color.BLUE, AlienRace.Krikkiters, Location.EroticonVI);
-    Alien otherAlienOther = AnonymousAlien.getAnonymousAlienForKnownData(Color.YELLOW, AlienRace.Krikkiters, Location.EroticonVI);
+    Alien alien = AnonymousAlien.getAnonymousAlienForKnownData(
+            Color.BLUE, AlienRace.Krikkiters, Location.EroticonVI);
+    Alien otherAlienSame = AnonymousAlien.getAnonymousAlienForKnownData(
+            Color.BLUE, AlienRace.Krikkiters, Location.EroticonVI);
+    Alien otherAlienOther = AnonymousAlien.getAnonymousAlienForKnownData(
+            Color.YELLOW, AlienRace.Krikkiters, Location.EroticonVI);
 
-    assertTrue(AnonymousAlien.anonymousAliens.size() == 2);
+    assertEquals(2, AnonymousAlien.anonymousAliens.size());
     assertSame(otherAlienSame, alien);
     assertNotSame(otherAlienOther, alien);
   }

@@ -12,6 +12,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ValidatorUtils {
@@ -121,6 +122,22 @@ public class ValidatorUtils {
         }
     }
 
+    public void validateContainsMethodReturningTypeAnnotated(Element annotatedElement,
+                                                             Class<? extends Annotation> annotation,
+                                                             Class<? extends Annotation> returnTypeAnnotation) {
+        if(annotatedElement.getEnclosedElements()
+                .stream()
+                .noneMatch(element -> isMethodReturningTypeAnnotated(element, returnTypeAnnotation))) {
+            printMessage(
+                    annotation.getSimpleName() +
+                            " %1$s contain a method returning " +
+                            returnTypeAnnotation.getSimpleName() +
+                            ".",
+                    annotatedElement,
+                    annotation);
+        }
+    }
+
     /** Generates a compiler message of appropriate level.
      * Replaces all occurrences of "%1$s" in the message
      * with a verb like must or should.
@@ -191,6 +208,14 @@ public class ValidatorUtils {
     private boolean isAnnotatedWithAnyOf(Element element, Class<? extends Annotation>[] annotations) {
         return Arrays.stream(annotations)
                 .anyMatch(annotation -> element.getAnnotation(annotation) != null);
+    }
+
+    private boolean isMethodReturningTypeAnnotated(Element element,
+                                                   Class<? extends Annotation> returnTypeAnnotation) {
+        return element.getKind() == ElementKind.METHOD
+                && Optional.ofNullable(getReturnedElement((ExecutableElement) element))
+                .map(returnedElement -> returnedElement.getAnnotation(returnTypeAnnotation))
+                .isPresent();
     }
 
     private String toString(Class<? extends Annotation>[] annotations) {

@@ -5,6 +5,8 @@ import org.jpatterns.gof.behavioral.*;
 
 import java.lang.annotation.*;
 
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
+
 /**
  * <b>Intent [GoF, pg 195]:</b> Use sharing to support large numbers of
  * fine-grained objects efficiently.
@@ -31,36 +33,36 @@ public @interface FlyweightPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface FlyweightFactory {
+  @interface FlyweightFactory {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Flyweight {
+  @interface Flyweight {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface UnsharedConcreteFlyweight {
+  @interface UnsharedConcreteFlyweight {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ConcreteFlyweight {
+  @interface ConcreteFlyweight {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 }
