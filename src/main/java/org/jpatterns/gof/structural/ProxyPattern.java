@@ -1,9 +1,10 @@
 package org.jpatterns.gof.structural;
 
 import org.jpatterns.core.*;
-import org.jpatterns.gof.structural.*;
 
 import java.lang.annotation.*;
+
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
 
 /**
  * <b>Intent [GoF, pg 207]:</b> Provide a surrogate or placeholder for another
@@ -34,27 +35,27 @@ public @interface ProxyPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Subject {
+  @interface Subject {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface RealSubject {
+  @interface RealSubject {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Proxy {
+  @interface Proxy {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
 
     Variation variation() default Variation.STATIC_MANUAL;
@@ -66,17 +67,17 @@ public @interface ProxyPattern {
   @Target({ElementType.TYPE, ElementType.FIELD,
       ElementType.LOCAL_VARIABLE})
   @Documented
-  public @interface Client {
+  @interface Client {
     Class[] participants() default {};
 
     String comment() default "";
   }
 
-  public static enum Variation {
+  enum Variation {
     STATIC_MANUAL, STATIC_GENERATED, DYNAMIC
   }
 
-  public static enum Type {
+  enum Type {
     UNDEFINED, VIRTUAL, REMOTE, PROTECTION
   }
 }
