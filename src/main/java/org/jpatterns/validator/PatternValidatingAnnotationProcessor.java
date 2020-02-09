@@ -32,7 +32,8 @@ public class PatternValidatingAnnotationProcessor implements Processor {
                 new BridgePatternValidator(validatorUtils),
                 new CompositePatternValidator(validatorUtils),
                 new DecoratorPatternValidator(validatorUtils),
-                new FlyweightPatternValidator(validatorUtils));
+                new FlyweightPatternValidator(validatorUtils),
+                new ProxyPatternValidator(validatorUtils));
     }
 
     @Override
