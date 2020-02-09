@@ -10,8 +10,8 @@ import org.junit.Test;
  */
 public class ProxyTest {
 
+  @ProxyPattern.Client
   private static class Norwegian {
-    @ProxyPattern.Client
     private final Lutefisk lutefisk;
     private boolean sick;
 
@@ -59,7 +59,7 @@ public class ProxyTest {
     }
   }
 
-  @ProxyPattern.Subject
+  @ProxyPattern.RealSubject
   private static class LutefiskImpl implements Lutefisk {
     public void eatenBy(Norwegian eater) {
       eater.becomeSick();
