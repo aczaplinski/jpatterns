@@ -5,6 +5,8 @@ import org.jpatterns.gof.structural.CompositePattern;
 
 import java.lang.annotation.*;
 
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
+
 /**
  * <b>Intent [GoF, pg 223]:</b> Avoid coupling the sender of a request to its
  * receiver by giving more than one object a chance to handle the request. Chain
@@ -34,18 +36,18 @@ public @interface ChainOfResponsibilityPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Handler {
+  @interface Handler {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ConcreteHandler {
+  @interface ConcreteHandler {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
 
     boolean defaultHandler() default false;
