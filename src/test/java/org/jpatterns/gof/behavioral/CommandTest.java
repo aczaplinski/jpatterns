@@ -1,6 +1,7 @@
 package org.jpatterns.gof.behavioral;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 /**
@@ -13,7 +14,7 @@ public class CommandTest {
   public void executeCommand() {
     final TestCommand command = new TestCommand();
     new CommandReceiver().receive(command);
-    assertEquals(true, command.ran);
+    assertTrue(command.ran);
   }
 
   @CommandPattern.Command(participants = CommandReceiver.class)
