@@ -1,6 +1,7 @@
 package org.jpatterns.validator;
 
 import org.jpatterns.validator.gof.behavioral.ChainOfResponsibilityPatternValidator;
+import org.jpatterns.validator.gof.behavioral.CommandPatternValidator;
 import org.jpatterns.validator.gof.creational.*;
 import org.jpatterns.validator.gof.structural.*;
 
@@ -25,6 +26,7 @@ public class PatternValidatingAnnotationProcessor implements Processor {
         ValidatorUtils validatorUtils = new ValidatorUtils(processingEnv);
         patternValidators = List.of(
                 new ChainOfResponsibilityPatternValidator(validatorUtils),
+                new CommandPatternValidator(validatorUtils),
                 new AbstractFactoryPatternValidator(validatorUtils),
                 new BuilderPatternValidator(validatorUtils),
                 new FactoryMethodPatternValidator(validatorUtils),

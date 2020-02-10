@@ -6,6 +6,8 @@ import org.jpatterns.gof.structural.CompositePattern;
 
 import java.lang.annotation.*;
 
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
+
 /**
  * <b>Intent [GoF, pg 233]:</b> Encapsulate a request as an object, thereby
  * letting you parameterize clients with different requests, queue or log
@@ -43,9 +45,9 @@ public @interface CommandPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Command {
+  @interface Command {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
 
     boolean undoable() default false;
@@ -54,7 +56,16 @@ public @interface CommandPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ConcreteCommand {
+  @interface ConcreteCommand {
+    Class[] participants() default {};
+    ValidationErrorLevel validationErrorLevel() default WARNING;
+    String comment() default "";
+  }
+
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target(ElementType.TYPE)
+  @Documented
+  @interface Invoker {
     Class[] participants() default {};
 
     String comment() default "";
@@ -63,7 +74,7 @@ public @interface CommandPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Invoker {
+  @interface Receiver {
     Class[] participants() default {};
 
     String comment() default "";
@@ -72,16 +83,7 @@ public @interface CommandPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Receiver {
-    Class[] participants() default {};
-
-    String comment() default "";
-  }
-
-  @Retention(RetentionPolicy.RUNTIME)
-  @Target(ElementType.TYPE)
-  @Documented
-  public @interface Client {
+  @interface Client {
     Class[] participants() default {};
 
     String comment() default "";
