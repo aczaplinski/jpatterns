@@ -8,7 +8,7 @@ import org.junit.Test;
 import static com.google.testing.compile.CompilationSubject.assertThat;
 import static com.google.testing.compile.Compiler.javac;
 
-public class ChainOfResponsibilityValidatorTest {
+public class ChainOfResponsibilityPatternValidatorTest {
 
     @Test
     public void testCorrectUsage() {
