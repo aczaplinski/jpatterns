@@ -6,6 +6,8 @@ import org.jpatterns.gof.structural.FlyweightPattern;
 
 import java.lang.annotation.*;
 
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
+
 /**
  * <b>Intent [GoF, pg 305]:</b> Allow an object to alter its behavior when its
  * internal state changes. The object will appear to change its class.
@@ -32,7 +34,7 @@ public @interface StatePattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Context {
+  @interface Context {
     Class[] participants() default {};
 
     String comment() default "";
@@ -41,18 +43,18 @@ public @interface StatePattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface State {
+  @interface State {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ConcreteState {
+  @interface ConcreteState {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 }
