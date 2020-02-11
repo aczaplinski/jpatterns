@@ -5,6 +5,8 @@ import org.jpatterns.gof.creational.FactoryMethodPattern;
 
 import java.lang.annotation.*;
 
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
+
 /**
  * <b>Intent [GoF, pg 325]:</b> Define the skeleton of an algorithm in an
  * operation, deferring some steps to subclasses. Template Method lets
@@ -33,16 +35,25 @@ public @interface TemplateMethodPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface AbstractClass {
+  @interface AbstractClass {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ConcreteClass {
+  @interface ConcreteClass {
+    Class[] participants() default {};
+    ValidationErrorLevel validationErrorLevel() default WARNING;
+    String comment() default "";
+  }
+
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target(ElementType.METHOD)
+  @Documented
+  @interface TemplateMethod {
     Class[] participants() default {};
 
     String comment() default "";
@@ -51,16 +62,7 @@ public @interface TemplateMethodPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.METHOD)
   @Documented
-  public @interface TemplateMethod {
-    Class[] participants() default {};
-
-    String comment() default "";
-  }
-
-  @Retention(RetentionPolicy.RUNTIME)
-  @Target(ElementType.METHOD)
-  @Documented
-  public @interface PrimitiveOperation {
+  @interface PrimitiveOperation {
     Class[] participants() default {};
 
     String comment() default "";

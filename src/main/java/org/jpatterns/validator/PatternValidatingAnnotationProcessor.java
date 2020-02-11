@@ -33,6 +33,7 @@ public class PatternValidatingAnnotationProcessor implements Processor {
                 new ObserverPatternValidator(validatorUtils),
                 new StatePatternValidator(validatorUtils),
                 new StrategyPatternValidator(validatorUtils),
+                new TemplateMethodPatternValidator(validatorUtils),
                 new AbstractFactoryPatternValidator(validatorUtils),
                 new BuilderPatternValidator(validatorUtils),
                 new FactoryMethodPatternValidator(validatorUtils),
