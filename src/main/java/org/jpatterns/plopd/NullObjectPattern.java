@@ -31,44 +31,44 @@ import java.lang.annotation.*;
     related = {FlyweightPattern.class, StrategyPattern.class,
         SingletonPattern.class})
 public @interface NullObjectPattern {
-  public abstract Class[] participants() default {};
+  Class[] participants() default {};
 
-  public abstract String comment() default "";
+  String comment() default "";
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface AbstractObject {
-    public abstract Class[] participants() default {};
+  @interface AbstractObject {
+    Class[] participants() default {};
 
-    public abstract String comment() default "";
+    String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface RealObject {
-    public abstract Class[] participants() default {};
+  @interface RealObject {
+    Class[] participants() default {};
 
-    public abstract String comment() default "";
+    String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface NullObject {
-    public abstract Class[] participants() default {};
+  @interface NullObject {
+    Class[] participants() default {};
 
-    public abstract String comment() default "";
+    String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target({ElementType.TYPE, ElementType.FIELD,
       ElementType.LOCAL_VARIABLE})
   @Documented
-  public @interface Client {
-    public abstract Class[] participants() default {};
+  @interface Client {
+    Class[] participants() default {};
 
-    public abstract String comment() default "";
+    String comment() default "";
   }
 }
