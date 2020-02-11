@@ -5,7 +5,7 @@ import org.junit.Test;
 
 public class NullObjectTest {
   @NullObjectPattern.AbstractObject
-  private static interface Policy {
+  private interface Policy {
     float calculateInterest();
   }
 
