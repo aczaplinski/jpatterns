@@ -3,6 +3,7 @@ package org.jpatterns.validator;
 import org.jpatterns.validator.gof.behavioral.*;
 import org.jpatterns.validator.gof.creational.*;
 import org.jpatterns.validator.gof.structural.*;
+import org.jpatterns.validator.plopd.NullObjectPatternValidator;
 
 import javax.annotation.processing.Completion;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -45,7 +46,8 @@ public class PatternValidatingAnnotationProcessor implements Processor {
                 new CompositePatternValidator(validatorUtils),
                 new DecoratorPatternValidator(validatorUtils),
                 new FlyweightPatternValidator(validatorUtils),
-                new ProxyPatternValidator(validatorUtils));
+                new ProxyPatternValidator(validatorUtils),
+                new NullObjectPatternValidator(validatorUtils));
     }
 
     @Override

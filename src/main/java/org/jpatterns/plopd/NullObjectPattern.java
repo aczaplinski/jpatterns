@@ -7,6 +7,8 @@ import org.jpatterns.gof.structural.FlyweightPattern;
 
 import java.lang.annotation.*;
 
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
+
 /**
  * <b>Intent [PLoPD3, pg 5]:</b> A Null Object provides a surrogate for another
  * object that shares the same interface but does nothing.  Thus, the Null
@@ -40,7 +42,7 @@ public @interface NullObjectPattern {
   @Documented
   @interface AbstractObject {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
@@ -49,7 +51,7 @@ public @interface NullObjectPattern {
   @Documented
   @interface RealObject {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
@@ -58,7 +60,7 @@ public @interface NullObjectPattern {
   @Documented
   @interface NullObject {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
