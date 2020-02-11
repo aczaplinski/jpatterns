@@ -27,9 +27,10 @@ public class FactoryMethodPatternValidator implements PatternValidator {
                     FactoryMethodPattern.ConcreteCreator.class,
                     FactoryMethodPattern.ConcreteCreator.class,
                     FactoryMethodPattern.Creator.class);
-            validateContainsMethodReturningProduct(annotatedElement,
+            validatorUtils.validateContainsMethodReturningTypeAnnotatedWithAnyOf(annotatedElement,
                     FactoryMethodPattern.ConcreteCreator.class,
-                    true);
+                    FactoryMethodPattern.ConcreteProduct.class,
+                    FactoryMethodPattern.Product.class);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(FactoryMethodPattern.ConcreteProduct.class)) {
@@ -44,41 +45,15 @@ public class FactoryMethodPatternValidator implements PatternValidator {
                 roundEnv.getElementsAnnotatedWith(FactoryMethodPattern.Creator.class)) {
             validatorUtils.validateIsAbstractClassOrInterface(annotatedElement,
                     FactoryMethodPattern.Creator.class);
-            validateContainsMethodReturningProduct(annotatedElement,
+            validatorUtils.validateContainsMethodReturningTypeAnnotatedWithAnyOf(annotatedElement,
                     FactoryMethodPattern.Creator.class,
-                    false);
+                    FactoryMethodPattern.Product.class);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(FactoryMethodPattern.Product.class)) {
             validatorUtils.validateIsAbstractClassOrInterface(annotatedElement,
                     FactoryMethodPattern.Product.class);
         }
-    }
-
-    private void validateContainsMethodReturningProduct(Element annotatedElement,
-                                                        Class<? extends Annotation> annotation,
-                                                        boolean mustBeConcrete) {
-        if(annotatedElement.getEnclosedElements()
-                .stream()
-                .noneMatch(element -> isMethodReturningProduct(element, mustBeConcrete))) {
-            validatorUtils.printMessage(
-                    annotation.getSimpleName()
-                            + " %1$s contain a method returning"
-                            + (mustBeConcrete ? " Concrete" : "")
-                            + " Product.",
-                    annotatedElement,
-                    annotation);
-        }
-    }
-
-    private boolean isMethodReturningProduct(Element element, boolean mustBeConcrete) {
-        return element.getKind() == ElementKind.METHOD
-               && Optional.ofNullable(validatorUtils.getReturnedElement((ExecutableElement) element))
-                    .map(returnedElement ->
-                            returnedElement.getAnnotation(FactoryMethodPattern.ConcreteProduct.class) != null
-                            || (!mustBeConcrete
-                                    && returnedElement.getAnnotation(FactoryMethodPattern.Product.class) != null))
-                    .orElse(false);
     }
 
 }
