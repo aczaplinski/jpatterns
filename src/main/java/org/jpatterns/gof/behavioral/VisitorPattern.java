@@ -5,6 +5,8 @@ import org.jpatterns.gof.structural.CompositePattern;
 
 import java.lang.annotation.*;
 
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
+
 /**
  * <b>Intent [GoF, pg 331]:</b> Represent an operation to be performed on the
  * elements of an object structure. Visitor lets you define a new operation
@@ -32,43 +34,43 @@ public @interface VisitorPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Visitor {
+  @interface Visitor {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ConcreteVisitor {
+  @interface ConcreteVisitor {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Element {
+  @interface Element {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ConcreteElement {
+  @interface ConcreteElement {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ObjectStructure {
+  @interface ObjectStructure {
     Class[] participants() default {};
 
     String comment() default "";
