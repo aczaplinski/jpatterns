@@ -6,6 +6,8 @@ import org.jpatterns.gof.structural.CompositePattern;
 
 import java.lang.annotation.*;
 
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
+
 /**
  * <b>Intent [GoF, pg 257]:</b> Provide a way to access the elements of an
  * aggregate object sequentially without exposing its underlying representation.
@@ -33,36 +35,36 @@ public @interface IteratorPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Aggregate {
+  @interface Aggregate {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Iterator {
+  @interface Iterator {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ConcreteAggregate {
+  @interface ConcreteAggregate {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ConcreteIterator {
+  @interface ConcreteIterator {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 }

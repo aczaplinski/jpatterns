@@ -3,6 +3,7 @@ package org.jpatterns.validator;
 import org.jpatterns.validator.gof.behavioral.ChainOfResponsibilityPatternValidator;
 import org.jpatterns.validator.gof.behavioral.CommandPatternValidator;
 import org.jpatterns.validator.gof.behavioral.InterpreterPatternValidator;
+import org.jpatterns.validator.gof.behavioral.IteratorPatternValidator;
 import org.jpatterns.validator.gof.creational.*;
 import org.jpatterns.validator.gof.structural.*;
 
@@ -29,6 +30,7 @@ public class PatternValidatingAnnotationProcessor implements Processor {
                 new ChainOfResponsibilityPatternValidator(validatorUtils),
                 new CommandPatternValidator(validatorUtils),
                 new InterpreterPatternValidator(validatorUtils),
+                new IteratorPatternValidator(validatorUtils),
                 new AbstractFactoryPatternValidator(validatorUtils),
                 new BuilderPatternValidator(validatorUtils),
                 new FactoryMethodPatternValidator(validatorUtils),

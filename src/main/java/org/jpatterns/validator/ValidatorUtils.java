@@ -122,16 +122,18 @@ public class ValidatorUtils {
         }
     }
 
-    public void validateContainsMethodReturningTypeAnnotated(Element annotatedElement,
+    @SafeVarargs
+    public final void validateContainsMethodReturningTypeAnnotatedWithAnyOf(Element annotatedElement,
                                                              Class<? extends Annotation> annotation,
-                                                             Class<? extends Annotation> returnTypeAnnotation) {
+                                                             Class<? extends Annotation> ... returnTypeAnnotations) {
         if(annotatedElement.getEnclosedElements()
                 .stream()
-                .noneMatch(element -> isMethodReturningTypeAnnotated(element, returnTypeAnnotation))) {
+                .noneMatch(element -> isMethodReturningTypeAnnotatedWithAnyOf(element, returnTypeAnnotations))) {
             printMessage(
                     annotation.getSimpleName() +
                             " %1$s contain a method returning " +
-                            returnTypeAnnotation.getSimpleName() +
+                            (returnTypeAnnotations.length == 1 ? "" : "one of: ") +
+                            toString(returnTypeAnnotations) +
                             ".",
                     annotatedElement,
                     annotation);
@@ -210,12 +212,12 @@ public class ValidatorUtils {
                 .anyMatch(annotation -> element.getAnnotation(annotation) != null);
     }
 
-    private boolean isMethodReturningTypeAnnotated(Element element,
-                                                   Class<? extends Annotation> returnTypeAnnotation) {
+    private boolean isMethodReturningTypeAnnotatedWithAnyOf(Element element,
+                                                   Class<? extends Annotation> returnTypeAnnotations[]) {
         return element.getKind() == ElementKind.METHOD
                 && Optional.ofNullable(getReturnedElement((ExecutableElement) element))
-                .map(returnedElement -> returnedElement.getAnnotation(returnTypeAnnotation))
-                .isPresent();
+                .map(returnedElement -> isAnnotatedWithAnyOf(returnedElement, returnTypeAnnotations))
+                .orElse(false);
     }
 
     private String toString(Class<? extends Annotation>[] annotations) {

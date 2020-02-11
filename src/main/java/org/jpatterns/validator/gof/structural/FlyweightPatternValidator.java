@@ -18,7 +18,7 @@ public class FlyweightPatternValidator implements PatternValidator {
     public void process(RoundEnvironment roundEnv) {
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(FlyweightPattern.FlyweightFactory.class)) {
-            validatorUtils.validateContainsMethodReturningTypeAnnotated(annotatedElement,
+            validatorUtils.validateContainsMethodReturningTypeAnnotatedWithAnyOf(annotatedElement,
                     FlyweightPattern.FlyweightFactory.class,
                     FlyweightPattern.Flyweight.class);
         }

@@ -23,7 +23,7 @@ public class BuilderPatternValidator implements PatternValidator {
                 roundEnv.getElementsAnnotatedWith(BuilderPattern.Builder.class)) {
             validatorUtils.validateIsAbstractClassOrInterface(annotatedElement,
                     BuilderPattern.Builder.class);
-            validatorUtils.validateContainsMethodReturningTypeAnnotated(annotatedElement,
+            validatorUtils.validateContainsMethodReturningTypeAnnotatedWithAnyOf(annotatedElement,
                     BuilderPattern.Builder.class,
                     BuilderPattern.Product.class);
         }
@@ -35,13 +35,13 @@ public class BuilderPatternValidator implements PatternValidator {
                     BuilderPattern.ConcreteBuilder.class,
                     BuilderPattern.ConcreteBuilder.class,
                     BuilderPattern.Builder.class);
-            validatorUtils.validateContainsMethodReturningTypeAnnotated(annotatedElement,
+            validatorUtils.validateContainsMethodReturningTypeAnnotatedWithAnyOf(annotatedElement,
                     BuilderPattern.ConcreteBuilder.class,
                     BuilderPattern.Product.class);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(BuilderPattern.Director.class)) {
-            validatorUtils.validateContainsMethodReturningTypeAnnotated(annotatedElement,
+            validatorUtils.validateContainsMethodReturningTypeAnnotatedWithAnyOf(annotatedElement,
                     BuilderPattern.Director.class,
                     BuilderPattern.Product.class);
         }
