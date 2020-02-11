@@ -11,16 +11,16 @@ import java.util.zip.Adler32;
  */
 public class StrategyTest {
   @StrategyPattern.Strategy
-  private static interface Checksum {
-    public void update(int b);
+  private interface Checksum {
+    void update(int b);
 
-    public void update(byte[] b);
+    void update(byte[] b);
 
-    public void update(byte[] b, int off, int len);
+    void update(byte[] b, int off, int len);
 
-    public long getValue();
+    long getValue();
 
-    public void reset();
+    void reset();
   }
 
   @StrategyPattern.ConcreteStrategy

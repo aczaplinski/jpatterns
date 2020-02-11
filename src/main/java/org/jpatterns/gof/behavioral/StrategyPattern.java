@@ -5,6 +5,8 @@ import org.jpatterns.gof.structural.FlyweightPattern;
 
 import java.lang.annotation.*;
 
+import static org.jpatterns.core.ValidationErrorLevel.WARNING;
+
 /**
  * <b>Intent [GoF, pg 315]:</b> Define a family of algorithms, encapsulate each
  * one, and make them interchangeable. Strategy lets the algorithm vary
@@ -33,25 +35,25 @@ public @interface StrategyPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Context {
+  @interface Context {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface Strategy {
+  @interface Strategy {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.FIELD)
   @Documented
-  public @interface StrategyField {
+  @interface StrategyField {
     Class[] participants() default {};
 
     String comment() default "";
@@ -60,9 +62,9 @@ public @interface StrategyPattern {
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
   @Documented
-  public @interface ConcreteStrategy {
+  @interface ConcreteStrategy {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 }
