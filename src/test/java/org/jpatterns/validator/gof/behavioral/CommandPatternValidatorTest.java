@@ -109,4 +109,50 @@ public class CommandPatternValidatorTest {
         assertThat(compilation).hadWarningContaining(
                 "Command should be");
     }
+
+    @Test
+    public void testConcreteCommandWithoutReceiver() {
+        Compilation compilation = javac()
+                .withProcessors(new PatternValidatingAnnotationProcessor())
+                .compile(JavaFileObjects.forSourceLines(
+                        "Test",
+                        "package org.jpatterns.gof.behavioral;",
+                        "class Test {",
+                        "   @CommandPattern.Command",
+                        "   interface Command {",
+                        "       void execute();",
+                        "   }",
+                        "   @CommandPattern.ConcreteCommand",
+                        "   class ConcreteCommand implements Command {",
+                        "       @Override",
+                        "       public void execute() {",
+                        "       }",
+                        "   }",
+                        "   @CommandPattern.Receiver",
+                        "   class Receiver {",
+                        "       public void performAction() {",
+                        "       }",
+                        "   }",
+                        "   @CommandPattern.Invoker",
+                        "   class Invoker {",
+                        "       private Command command;",
+                        "       Invoker(Command command) {",
+                        "           this.command = command;",
+                        "       }",
+                        "       public void onClick() {",
+                        "           command.execute();",
+                        "       }",
+                        "   }",
+                        "   @CommandPattern.Client",
+                        "   class Client {",
+                        "       void setup() {",
+                        "           new Invoker(new ConcreteCommand());",
+                        "       }",
+                        "   }",
+                        "}"));
+        assertThat(compilation).succeeded();
+        assertThat(compilation).hadWarningCount(1);
+        assertThat(compilation).hadWarningContaining(
+                "ConcreteCommand should store Receiver");
+    }
 }

@@ -67,7 +67,7 @@ public @interface CommandPattern {
   @Documented
   @interface Invoker {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 

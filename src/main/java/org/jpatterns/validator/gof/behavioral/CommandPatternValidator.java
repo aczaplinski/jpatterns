@@ -29,6 +29,15 @@ public class CommandPatternValidator implements PatternValidator {
                     CommandPattern.ConcreteCommand.class,
                     CommandPattern.ConcreteCommand.class,
                     CommandPattern.Command.class);
+            validatorUtils.validateContainsFieldOfTypeAnnotatedWith(annotatedElement,
+                    CommandPattern.ConcreteCommand.class,
+                    CommandPattern.Receiver.class);
+        }
+        for(Element annotatedElement :
+                roundEnv.getElementsAnnotatedWith(CommandPattern.Invoker.class)) {
+            validatorUtils.validateContainsFieldOfTypeAnnotatedWith(annotatedElement,
+                    CommandPattern.Invoker.class,
+                    CommandPattern.Command.class);
         }
     }
 }
