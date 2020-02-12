@@ -81,4 +81,40 @@ public class MediatorPatternValidatorTest {
         assertThat(compilation).hadWarningCount(1);
         assertThat(compilation).hadWarningContaining("ConcreteMediator should not be");
     }
+
+    @Test
+    public void testConcreteColleagueWithNoMediatorReference() {
+        Compilation compilation = javac()
+                .withProcessors(new PatternValidatingAnnotationProcessor())
+                .compile(JavaFileObjects.forSourceLines(
+                        "Test",
+                        "package org.jpatterns.gof.behavioral;",
+                        "class Test {",
+                        "   @MediatorPattern.Mediator",
+                        "   abstract static class Mediator {",
+                        "       static {",
+                        "           int x = 1;",
+                        "       }",
+                        "       {",
+                        "       }",
+                        "       void zoo() {",
+                        "       }",
+                        "   }",
+                        "   @MediatorPattern.ConcreteMediator",
+                        "   static class ConcreteMediator extends Mediator {",
+                        "   }",
+                        "   @MediatorPattern.Colleague",
+                        "   abstract static class Colleague {",
+                        "       Object voo() {",
+                        "           return \"abc\";",
+                        "       }",
+                        "   }",
+                        "   @MediatorPattern.ConcreteColleague",
+                        "   static class ConcreteColleague extends Colleague {",
+                        "   }",
+                        "}"));
+        assertThat(compilation).succeeded();
+        assertThat(compilation).hadWarningCount(1);
+        assertThat(compilation).hadWarningContaining("ConcreteColleague should store");
+    }
 }

@@ -201,7 +201,8 @@ public class ValidatorUtils {
         }
     }
 
-    private boolean isAnnotatedWithAnyOf(TypeMirror typeMirror, Class<? extends Annotation>[] annotations) {
+    @SafeVarargs
+    public final boolean isAnnotatedWithAnyOf(TypeMirror typeMirror, Class<? extends Annotation> ... annotations) {
         /* typeMirror.getAnnotation(<Class<A>>) returns null even if the annotation is present,
            so is it converted to Element and the Element taking version of the method is used */
         return isAnnotatedWithAnyOf(types.asElement(typeMirror), annotations);
