@@ -12,9 +12,10 @@ import org.junit.Test;
 public class CommandTest {
   @Test
   public void executeCommand() {
-    final TestCommand command = new TestCommand();
-    new CommandReceiver().receive(command);
-    assertTrue(command.ran);
+    final CommandReceiver receiver = new CommandReceiver();
+    final Command command = new TestCommand(receiver);
+    command.execute();
+    assertTrue(receiver.ran);
   }
 
   @CommandPattern.Command(participants = CommandReceiver.class)
@@ -24,18 +25,23 @@ public class CommandTest {
 
   @CommandPattern.ConcreteCommand(comment = "This is our TestCommand")
   class TestCommand implements Command {
-    private boolean ran;
+    private CommandReceiver receiver;
+
+    TestCommand(CommandReceiver receiver) {
+      this.receiver = receiver;
+    }
 
     public void execute() {
-      ran = true;
+      receiver.receive();
     }
   }
 
   @CommandPattern.Receiver(participants = Command.class)
   private class CommandReceiver {
+    private boolean ran;
 
-    public void receive(Command command) {
-      command.execute();
+    void receive() {
+      ran = true;
     }
   }
 }
