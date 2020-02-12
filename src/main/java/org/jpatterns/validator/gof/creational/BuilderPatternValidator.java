@@ -6,10 +6,6 @@ import org.jpatterns.validator.ValidatorUtils;
 
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
-import java.lang.annotation.Annotation;
-import java.util.Optional;
 
 public class BuilderPatternValidator implements PatternValidator {
     private ValidatorUtils validatorUtils;

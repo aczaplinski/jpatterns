@@ -157,7 +157,7 @@ public class AbstractFactoryPatternValidatorTest {
     }
 
     @Test
-    public void testMulitpleWarnings() {
+    public void testMultipleWarnings() {
         Compilation compilation = javac()
                 .withProcessors(new PatternValidatingAnnotationProcessor())
                 .compile(JavaFileObjects.forSourceLines(

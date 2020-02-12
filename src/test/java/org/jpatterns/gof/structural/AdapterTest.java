@@ -8,7 +8,7 @@ import org.junit.Test;
  * @since 2010-08-09
  */
 public class AdapterTest {
-  private static interface Singer {
+  private interface Singer {
     String sing();
   }
 
