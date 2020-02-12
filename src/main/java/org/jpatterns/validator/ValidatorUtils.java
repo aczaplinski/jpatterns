@@ -140,6 +140,19 @@ public class ValidatorUtils {
         }
     }
 
+    public void validateContainsFieldOfTypeAnnotatedWith(Element element,
+                                                         Class<? extends Annotation> annotation,
+                                                         Class<? extends Annotation> soughtTypeAnnotation) {
+        if(!containsFieldOfTypeAnnotatedWith(element, soughtTypeAnnotation)) {
+            printMessage(annotation.getSimpleName() +
+                            " %1$s store " +
+                            soughtTypeAnnotation.getSimpleName() +
+                            " reference",
+                    element,
+                    annotation);
+        }
+    }
+
     /** Generates a compiler message of appropriate level.
      * Replaces all occurrences of "%1$s" in the message
      * with a verb like must or should.
@@ -202,7 +215,7 @@ public class ValidatorUtils {
     }
 
     @SafeVarargs
-    public final boolean isAnnotatedWithAnyOf(TypeMirror typeMirror, Class<? extends Annotation> ... annotations) {
+    private final boolean isAnnotatedWithAnyOf(TypeMirror typeMirror, Class<? extends Annotation> ... annotations) {
         /* typeMirror.getAnnotation(<Class<A>>) returns null even if the annotation is present,
            so is it converted to Element and the Element taking version of the method is used */
         return isAnnotatedWithAnyOf(types.asElement(typeMirror), annotations);
@@ -219,6 +232,22 @@ public class ValidatorUtils {
                 && Optional.ofNullable(getReturnedElement((ExecutableElement) element))
                 .map(returnedElement -> isAnnotatedWithAnyOf(returnedElement, returnTypeAnnotations))
                 .orElse(false);
+    }
+
+    private boolean containsFieldOfTypeAnnotatedWith(Element element,
+                                                     Class<? extends Annotation> soughtTypeAnnotation) {
+        return element.getEnclosedElements().stream()
+                .anyMatch(candidateField ->
+                        candidateField.getKind() == ElementKind.FIELD &&
+                                isAnnotatedWithAnyOf(candidateField.asType(),
+                                        soughtTypeAnnotation))
+                ||
+                types.directSupertypes(element.asType()).stream()
+                        .anyMatch(supertypeCandidate ->
+                                containsFieldOfTypeAnnotatedWith(
+                                        types.asElement(
+                                                supertypeCandidate),
+                                        soughtTypeAnnotation));
     }
 
     private String toString(Class<? extends Annotation>[] annotations) {

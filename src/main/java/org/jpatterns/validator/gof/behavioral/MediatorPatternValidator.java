@@ -6,7 +6,6 @@ import org.jpatterns.validator.ValidatorUtils;
 
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
 
 public class MediatorPatternValidator implements PatternValidator {
     private ValidatorUtils validatorUtils;
@@ -44,29 +43,9 @@ public class MediatorPatternValidator implements PatternValidator {
                     MediatorPattern.ConcreteColleague.class,
                     MediatorPattern.ConcreteColleague.class,
                     MediatorPattern.Colleague.class);
-            validateConcreteColleagueHasMediatorReference(annotatedElement);
+            validatorUtils.validateContainsFieldOfTypeAnnotatedWith(annotatedElement,
+                    MediatorPattern.ConcreteColleague.class,
+                    MediatorPattern.Mediator.class);
         }
-    }
-
-    private void validateConcreteColleagueHasMediatorReference(Element concreteColleagueElement) {
-        if(!hasMediatorReference(concreteColleagueElement)) {
-            validatorUtils.printMessage("ConcreteColleague %1$s store Mediator reference",
-                    concreteColleagueElement,
-                    MediatorPattern.ConcreteColleague.class);
-        }
-    }
-
-    private boolean hasMediatorReference(Element element) {
-        return element.getEnclosedElements().stream()
-            .anyMatch(mediatorReferenceCandidateElement ->
-                    mediatorReferenceCandidateElement.getKind() == ElementKind.FIELD &&
-                    validatorUtils.isAnnotatedWithAnyOf(mediatorReferenceCandidateElement.asType(),
-                            MediatorPattern.Mediator.class, MediatorPattern.ConcreteMediator.class))
-                ||
-                validatorUtils.getTypes().directSupertypes(element.asType()).stream()
-                .anyMatch(supertypeWithMediatorReferenceCandidate ->
-                        hasMediatorReference(
-                                validatorUtils.getTypes().asElement(
-                                        supertypeWithMediatorReferenceCandidate)));
     }
 }
