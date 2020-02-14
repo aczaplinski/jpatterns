@@ -55,4 +55,28 @@ public class StatePatternValidatorTest {
         assertThat(compilation).hadWarningCount(1);
         assertThat(compilation).hadWarningContaining("State should be");
     }
+
+    @Test
+    public void testStateNotAnnotated() {
+        Compilation compilation = javac()
+                .withProcessors(new PatternValidatingAnnotationProcessor())
+                .compile(JavaFileObjects.forSourceLines(
+                        "Test",
+                        "package org.jpatterns.gof.behavioral;",
+                        "class Test {",
+                        "   interface State {",
+                        "   }",
+                        "   @StatePattern.ConcreteState",
+                        "   class ConcreteState implements State {",
+                        "   }",
+                        "   @StatePattern.Context",
+                        "   class Context {",
+                        "       private State state = new ConcreteState();",
+                        "   }",
+                        "}"));
+        assertThat(compilation).succeeded();
+        assertThat(compilation).hadWarningCount(2);
+        assertThat(compilation).hadWarningContaining("ConcreteState should be a subtype of");
+        assertThat(compilation).hadWarningContaining("Context should store State");
+    }
 }

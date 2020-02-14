@@ -36,7 +36,7 @@ public @interface StatePattern {
   @Documented
   @interface Context {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 

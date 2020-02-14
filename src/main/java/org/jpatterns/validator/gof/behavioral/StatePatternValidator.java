@@ -17,6 +17,12 @@ public class StatePatternValidator implements PatternValidator {
     @Override
     public void process(RoundEnvironment roundEnv) {
         for(Element annotatedElement :
+                roundEnv.getElementsAnnotatedWith(StatePattern.Context.class)) {
+            validatorUtils.validateContainsFieldOfTypeAnnotatedWith(annotatedElement,
+                    StatePattern.Context.class,
+                    StatePattern.State.class);
+        }
+        for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(StatePattern.State.class)) {
             validatorUtils.validateIsAbstractClassOrInterface(annotatedElement,
                     StatePattern.State.class);
