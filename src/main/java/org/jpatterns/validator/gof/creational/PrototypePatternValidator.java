@@ -23,10 +23,16 @@ public class PrototypePatternValidator implements PatternValidator {
                     PrototypePattern.ConcretePrototype.class,
                     PrototypePattern.ConcretePrototype.class,
                     PrototypePattern.Prototype.class);
+            validatorUtils.validateContainsMethodReturningTypeAnnotatedWithAnyOf(annotatedElement,
+                    PrototypePattern.ConcretePrototype.class,
+                    PrototypePattern.ConcretePrototype.class);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(PrototypePattern.Prototype.class)) {
             validatorUtils.validateIsAbstractClassOrInterface(annotatedElement,
+                    PrototypePattern.Prototype.class);
+            validatorUtils.validateContainsMethodReturningTypeAnnotatedWithAnyOf(annotatedElement,
+                    PrototypePattern.Prototype.class,
                     PrototypePattern.Prototype.class);
         }
     }
