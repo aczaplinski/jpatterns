@@ -30,18 +30,9 @@ public class SingletonPatternValidator implements PatternValidator {
             validatorUtils.validateElementModifiersDoNotContain(annotatedElement,
                     SingletonPattern.SingletonMethod.class,
                     Modifier.PRIVATE, Modifier.PROTECTED);
-            validateSingletonMethodIsInsideSingleton(annotatedElement);
-        }
-    }
-
-    private void validateSingletonMethodIsInsideSingleton(Element annotatedSingletonMethod) {
-        if(annotatedSingletonMethod.getEnclosingElement()
-                .getAnnotation(SingletonPattern.Singleton.class)
-                == null) {
-            validatorUtils.printMessage("Singleton Method %1$s reside in a class or interface" +
-                            " annotated with @Singleton",
-                    annotatedSingletonMethod,
-                    SingletonPattern.SingletonMethod.class);
+            validatorUtils.validateEnclosingTypeIsAnnotatedWithAnyOf(annotatedElement,
+                    SingletonPattern.SingletonMethod.class,
+                    SingletonPattern.Singleton.class);
         }
     }
 
