@@ -125,14 +125,14 @@ public class ValidatorUtils {
     @SafeVarargs
     public final void validateEnclosingTypeIsAnnotatedWithAnyOf(Element annotatedElement,
                                                      Class<? extends Annotation> annotation,
-                                                     Class<? extends Annotation> ... allowedSubelementAnnotations) {
-        if(Arrays.stream(allowedSubelementAnnotations)
-            .allMatch(allowedSubelementAnnotation ->
-                    annotatedElement.getEnclosingElement().getAnnotation(allowedSubelementAnnotation) == null)) {
+                                                     Class<? extends Annotation> ... allowedTypeAnnotations) {
+        if(Arrays.stream(allowedTypeAnnotations)
+            .allMatch(allowedTypeAnnotation ->
+                    annotatedElement.getEnclosingElement().getAnnotation(allowedTypeAnnotation) == null)) {
             printMessage(annotation.getSimpleName() +
                             " %1$s reside in a class or interface annotated with " +
-                            (allowedSubelementAnnotations.length == 1 ? "" : "any of: ") +
-                            toString(allowedSubelementAnnotations),
+                            (allowedTypeAnnotations.length == 1 ? "" : "any of: ") +
+                            toString(allowedTypeAnnotations),
                     annotatedElement,
                     annotation);
         }
