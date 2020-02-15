@@ -23,6 +23,12 @@ public class StrategyPatternValidator implements PatternValidator {
                     StrategyPattern.StrategyField.class);
         }
         for(Element annotatedElement :
+                roundEnv.getElementsAnnotatedWith(StrategyPattern.StrategyField.class)) {
+            validatorUtils.validateEnclosingTypeIsAnnotatedWithAnyOf(annotatedElement,
+                    StrategyPattern.StrategyField.class,
+                    StrategyPattern.Context.class);
+        }
+        for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(StrategyPattern.Strategy.class)) {
             validatorUtils.validateIsAbstractClassOrInterface(annotatedElement,
                     StrategyPattern.Strategy.class);

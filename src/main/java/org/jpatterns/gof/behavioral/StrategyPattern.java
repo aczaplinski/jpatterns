@@ -55,7 +55,7 @@ public @interface StrategyPattern {
   @Documented
   @interface StrategyField {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 

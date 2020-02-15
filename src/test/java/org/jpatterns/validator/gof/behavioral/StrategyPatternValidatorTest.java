@@ -56,4 +56,28 @@ public class StrategyPatternValidatorTest {
         assertThat(compilation).hadWarningCount(1);
         assertThat(compilation).hadWarningContaining("Context should contain");
     }
+
+    @Test
+    public void testContextNotAnnotated() {
+        Compilation compilation = javac()
+                .withProcessors(new PatternValidatingAnnotationProcessor())
+                .compile(JavaFileObjects.forSourceLines(
+                        "Test",
+                        "package org.jpatterns.gof.behavioral;",
+                        "class Test {",
+                        "   class Context {",
+                        "       @StrategyPattern.StrategyField",
+                        "       private Strategy strategy = new ConcreteStrategy();",
+                        "   }",
+                        "   @StrategyPattern.Strategy",
+                        "   abstract class Strategy {",
+                        "   }",
+                        "   @StrategyPattern.ConcreteStrategy",
+                        "   class ConcreteStrategy extends Strategy {",
+                        "   }",
+                        "}"));
+        assertThat(compilation).succeeded();
+        assertThat(compilation).hadWarningCount(1);
+        assertThat(compilation).hadWarningContaining("StrategyField should reside in");
+    }
 }
