@@ -47,6 +47,9 @@ public class DecoratorPatternValidator implements PatternValidator {
                     DecoratorPattern.ConcreteDecorator.class,
                     DecoratorPattern.ConcreteDecorator.class,
                     DecoratorPattern.Decorator.class);
+            validatorUtils.validateContainsFieldOfTypeAnnotatedWith(annotatedElement,
+                    DecoratorPattern.ConcreteDecorator.class,
+                    DecoratorPattern.Component.class);
         }
     }
 }

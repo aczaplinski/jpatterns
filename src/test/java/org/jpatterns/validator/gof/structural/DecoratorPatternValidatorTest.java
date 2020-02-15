@@ -33,8 +33,10 @@ public class DecoratorPatternValidatorTest {
                         "   }",
                         "   @DecoratorPattern.ConcreteDecorator",
                         "   class ConcreteDecorator implements Decorator {",
+                        "       private Component decoratedComponent = new ConcreteComponent();",
                         "       @Override",
                         "       public void operation() {",
+                        "           decoratedComponent.operation();",
                         "       }",
                         "   }",
                         "}"));
@@ -66,8 +68,9 @@ public class DecoratorPatternValidatorTest {
                         "   }",
                         "}"));
         assertThat(compilation).succeeded();
-        assertThat(compilation).hadWarningCount(2);
+        assertThat(compilation).hadWarningCount(3);
         assertThat(compilation).hadWarningContaining("ConcreteComponent should not be abstract");
         assertThat(compilation).hadWarningContaining("Decorator should be a subtype of");
+        assertThat(compilation).hadWarningContaining("ConcreteDecorator should store Component");
     }
 }
