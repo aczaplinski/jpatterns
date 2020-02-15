@@ -56,23 +56,12 @@ public class AbstractFactoryPatternValidator implements PatternValidator {
             validatorUtils.validateElementModifiersDoNotContain(annotatedElement,
                     AbstractFactoryPattern.FactoryMethod.class,
                     Modifier.PRIVATE, Modifier.PROTECTED, Modifier.STATIC);
-            validateFactoryMethodIsInsideFactory(annotatedElement);
+            validatorUtils.validateEnclosingTypeIsAnnotatedWithAnyOf(annotatedElement,
+                    AbstractFactoryPattern.FactoryMethod.class,
+                    AbstractFactoryPattern.AbstractFactory.class,
+                    AbstractFactoryPattern.ConcreteFactory.class);
             validateFactoryIsAbstractOrFactoryMethodHasOverride(annotatedElement);
             validateFactoryMethodReturnsProduct(annotatedElement);
-        }
-    }
-
-    private void validateFactoryMethodIsInsideFactory(Element annotatedFactoryMethod) {
-        if(annotatedFactoryMethod.getEnclosingElement()
-                .getAnnotation(AbstractFactoryPattern.AbstractFactory.class)
-                == null
-                && annotatedFactoryMethod.getEnclosingElement()
-                .getAnnotation(AbstractFactoryPattern.ConcreteFactory.class)
-                == null) {
-            validatorUtils.printMessage("Factory Method %1$s reside in a class or interface" +
-                            " annotated with either @AbstractFactory or @ConcreteFactory",
-                    annotatedFactoryMethod,
-                    AbstractFactoryPattern.FactoryMethod.class);
         }
     }
 

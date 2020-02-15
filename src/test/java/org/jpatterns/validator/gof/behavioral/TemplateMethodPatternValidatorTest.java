@@ -21,7 +21,7 @@ public class TemplateMethodPatternValidatorTest {
                         "   @TemplateMethodPattern.AbstractClass",
                         "   abstract class AbstractClass {",
                         "       @TemplateMethodPattern.TemplateMethod",
-                        "       void templateMethod() {",
+                        "       final void templateMethod() {",
                         "           primitiveOperation();",
                         "       }",
                         "       @TemplateMethodPattern.PrimitiveOperation",
@@ -29,6 +29,7 @@ public class TemplateMethodPatternValidatorTest {
                         "   }",
                         "   @TemplateMethodPattern.ConcreteClass",
                         "   class ConcreteClass extends AbstractClass {",
+                        "       @Override",
                         "       @TemplateMethodPattern.PrimitiveOperation",
                         "       void primitiveOperation() {",
                         "       }",
@@ -56,5 +57,34 @@ public class TemplateMethodPatternValidatorTest {
         assertThat(compilation).hadWarningCount(3);
         assertThat(compilation).hadWarningContaining("AbstractClass should contain");
         assertThat(compilation).hadWarningContaining("ConcreteClass should contain");
+    }
+
+    @Test
+    public void testOperationMethodInConcreteClassWithoutOverride() {
+        Compilation compilation = javac()
+                .withProcessors(new PatternValidatingAnnotationProcessor())
+                .compile(JavaFileObjects.forSourceLines(
+                        "Test",
+                        "package org.jpatterns.gof.behavioral;",
+                        "class Test {",
+                        "   @TemplateMethodPattern.AbstractClass",
+                        "   abstract class AbstractClass {",
+                        "       @TemplateMethodPattern.TemplateMethod",
+                        "       final void templateMethod() {",
+                        "           primitiveOperation();",
+                        "       }",
+                        "       @TemplateMethodPattern.PrimitiveOperation",
+                        "       abstract void primitiveOperation();",
+                        "   }",
+                        "   @TemplateMethodPattern.ConcreteClass",
+                        "   class ConcreteClass extends AbstractClass {",
+                        "       @TemplateMethodPattern.PrimitiveOperation",
+                        "       void primitiveOperation() {",
+                        "       }",
+                        "   }",
+                        "}"));
+        assertThat(compilation).succeeded();
+        assertThat(compilation).hadWarningCount(1);
+        assertThat(compilation).hadWarningContaining("Operation in Concrete Class should override");
     }
 }

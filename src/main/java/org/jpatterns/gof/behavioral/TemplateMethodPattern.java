@@ -55,7 +55,7 @@ public @interface TemplateMethodPattern {
   @Documented
   @interface TemplateMethod {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 
@@ -64,7 +64,7 @@ public @interface TemplateMethodPattern {
   @Documented
   @interface PrimitiveOperation {
     Class[] participants() default {};
-
+    ValidationErrorLevel validationErrorLevel() default WARNING;
     String comment() default "";
   }
 }
