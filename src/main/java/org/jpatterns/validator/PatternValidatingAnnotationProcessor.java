@@ -62,7 +62,7 @@ public class PatternValidatingAnnotationProcessor implements Processor {
 
     @Override
     public SourceVersion getSupportedSourceVersion() {
-        return SourceVersion.RELEASE_13;
+        return SourceVersion.RELEASE_11;
     }
 
     @Override
