@@ -91,6 +91,23 @@
 					<release>${jdk}</release>
 				</configuration>
 				<executions>
+<!--				Works around a bug in Maven: https://stackoverflow.com/a/36250332-->
+					<execution>
+						<id>default-compile</id>
+						<configuration>
+							<compilerArgument>-proc:none</compilerArgument>
+							<includes>
+								<include>org/jpatterns/validator/PatternValidatingAnnotationProcessor.java</include>
+							</includes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>compile-project</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
 					<execution>
 						<id>process-test-annotations</id>
 						<phase>generate-test-resources</phase>
