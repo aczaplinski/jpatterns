@@ -108,21 +108,6 @@
 							<goal>compile</goal>
 						</goals>
 					</execution>
-					<execution>
-						<id>process-test-annotations</id>
-						<phase>generate-test-resources</phase>
-						<goals>
-							<goal>testCompile</goal>
-						</goals>
-						<configuration>
-							<proc>only</proc>
-							<annotationProcessors>
-								<annotationProcessor>
-                                    org.jpatterns.validator.PatternValidatingAnnotationProcessor
-                                </annotationProcessor>
-							</annotationProcessors>
-						</configuration>
-					</execution>
 				</executions>
 			</plugin>
 			<plugin>
