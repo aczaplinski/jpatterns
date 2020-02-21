@@ -50,7 +50,7 @@ public @interface AdapterPattern {
 
   /**
    * We would hardly ever use this annotation as the adaptee is
-   * usually not aware that he is being adapted.
+   * usually not aware that it is being adapted.
    */
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.TYPE)
