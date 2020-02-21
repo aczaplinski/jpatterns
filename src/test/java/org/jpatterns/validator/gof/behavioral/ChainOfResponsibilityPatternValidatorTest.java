@@ -86,8 +86,10 @@ public class ChainOfResponsibilityPatternValidatorTest {
                         "   }",
                         "}"));
         assertThat(compilation).succeeded();
-        assertThat(compilation).hadWarningCount(2);
+        assertThat(compilation).hadWarningCount(4);
         assertThat(compilation).hadWarningContaining(
                 "ConcreteHandler should be a subtype of");
+        assertThat(compilation).hadWarningContaining(
+                "ConcreteHandler should store Handler");
     }
 }

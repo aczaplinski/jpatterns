@@ -29,6 +29,9 @@ public class ChainOfResponsibilityPatternValidator implements PatternValidator {
                     ChainOfResponsibilityPattern.ConcreteHandler.class,
                     ChainOfResponsibilityPattern.ConcreteHandler.class,
                     ChainOfResponsibilityPattern.Handler.class);
+            validatorUtils.validateContainsFieldOfTypeAnnotatedWith(annotatedElement,
+                    ChainOfResponsibilityPattern.ConcreteHandler.class,
+                    ChainOfResponsibilityPattern.Handler.class);
         }
     }
 }
