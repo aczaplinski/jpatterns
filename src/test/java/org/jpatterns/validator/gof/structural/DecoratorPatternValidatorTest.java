@@ -73,4 +73,40 @@ public class DecoratorPatternValidatorTest {
         assertThat(compilation).hadWarningContaining("Decorator should be a subtype of");
         assertThat(compilation).hadWarningContaining("ConcreteDecorator should store Component");
     }
+
+    @Test
+    public void testComponentFieldIsClassTemplate() {
+        Compilation compilation = javac()
+                .withProcessors(new PatternValidatingAnnotationProcessor())
+                .compile(JavaFileObjects.forSourceLines(
+                        "Test",
+                        "package org.jpatterns.gof.structural;",
+                        "class Test {",
+                        "   @DecoratorPattern.Component",
+                        "   interface Component {",
+                        "       void operation();",
+                        "   }",
+                        "   @DecoratorPattern.ConcreteComponent",
+                        "   class ConcreteComponent implements Component {",
+                        "       @Override",
+                        "       public void operation() {",
+                        "       }",
+                        "   }",
+                        "   @DecoratorPattern.Decorator",
+                        "   interface Decorator extends Component {",
+                        "   }",
+                        "   @DecoratorPattern.ConcreteDecorator",
+                        "   class ConcreteDecorator<T extends Component> implements Decorator {",
+                        "       private T decoratedComponent;",
+                        "       ConcreteDecorator(T decoratedComponent) {",
+                        "           this.decoratedComponent = decoratedComponent;",
+                        "       }",
+                        "       @Override",
+                        "       public void operation() {",
+                        "           decoratedComponent.operation();",
+                        "       }",
+                        "   }",
+                        "}"));
+        assertThat(compilation).succeededWithoutWarnings();
+    }
 }

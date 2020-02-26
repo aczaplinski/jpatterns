@@ -6,6 +6,7 @@ import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.TypeVariable;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import java.lang.annotation.Annotation;
@@ -231,12 +232,25 @@ public class ValidatorUtils {
     }
 
     @SafeVarargs
-    private final boolean isAnnotatedWithAnyOf(TypeMirror typeMirror, Class<? extends Annotation> ... annotations) {
+    private boolean isAnnotatedWithAnyOf(TypeMirror typeMirror, Class<? extends Annotation> ... annotations) {
         /* typeMirror.getAnnotation(<Class<A>>) returns null even if the annotation is present,
            so is it converted to Element and the Element taking version of the method is used */
         Element element = types.asElement(typeMirror);
-        return element != null &&
-                isAnnotatedWithAnyOf(element, annotations);
+        if(element == null) {
+            return false;
+        }
+        if(isAnnotatedWithAnyOf(element, annotations)) {
+            return true;
+        }
+        if(typeMirror instanceof TypeVariable) {
+            /* If there is for example a class B<T extends C>{T t;}, C is annotated with @A,
+             and we ask whether t is annotated with @A,
+             then this if tells yes. */
+            return types.directSupertypes(typeMirror).stream()
+                    .anyMatch(typeVariableUpperBoundCandidate ->
+                            isAnnotatedWithAnyOf(typeVariableUpperBoundCandidate, annotations));
+        }
+        return false;
     }
 
     private boolean isAnnotatedWithAnyOf(Element element, Class<? extends Annotation>[] annotations) {
@@ -245,7 +259,7 @@ public class ValidatorUtils {
     }
 
     private boolean isMethodReturningTypeAnnotatedWithAnyOf(Element element,
-                                                   Class<? extends Annotation> returnTypeAnnotations[]) {
+                                                   Class<? extends Annotation>[] returnTypeAnnotations) {
         return element.getKind() == ElementKind.METHOD
                 && Optional.ofNullable(getReturnedElement((ExecutableElement) element))
                 .map(returnedElement -> isAnnotatedWithAnyOf(returnedElement, returnTypeAnnotations))
