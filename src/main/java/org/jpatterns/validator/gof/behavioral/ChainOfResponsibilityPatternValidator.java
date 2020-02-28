@@ -29,9 +29,20 @@ public class ChainOfResponsibilityPatternValidator implements PatternValidator {
                     ChainOfResponsibilityPattern.ConcreteHandler.class,
                     ChainOfResponsibilityPattern.ConcreteHandler.class,
                     ChainOfResponsibilityPattern.Handler.class);
-            validatorUtils.validateContainsFieldOfTypeAnnotatedWith(annotatedElement,
-                    ChainOfResponsibilityPattern.ConcreteHandler.class,
-                    ChainOfResponsibilityPattern.Handler.class);
+            validateIsDefaultHandlerOrContainsNextHandlerField(annotatedElement);
+        }
+    }
+
+    private void validateIsDefaultHandlerOrContainsNextHandlerField(Element annotatedConcreteHandler) {
+        if(!annotatedConcreteHandler.getAnnotation(ChainOfResponsibilityPattern.ConcreteHandler.class)
+                .defaultHandler()) {
+            if(!validatorUtils.containsFieldOfTypeAnnotatedWith(annotatedConcreteHandler,
+                    ChainOfResponsibilityPattern.Handler.class)) {
+                validatorUtils.printMessage(
+                        "ConcreteHandler that is not a default Handler %1$s store Handler reference",
+                        annotatedConcreteHandler,
+                        ChainOfResponsibilityPattern.ConcreteHandler.class);
+            }
         }
     }
 }

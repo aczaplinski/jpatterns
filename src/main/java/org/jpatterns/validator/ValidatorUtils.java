@@ -266,7 +266,7 @@ public class ValidatorUtils {
                 .orElse(false);
     }
 
-    private boolean containsFieldOfTypeAnnotatedWith(Element element,
+    public boolean containsFieldOfTypeAnnotatedWith(Element element,
                                                      Class<? extends Annotation> soughtTypeAnnotation) {
         return element.getEnclosedElements().stream()
                 .anyMatch(candidateField ->

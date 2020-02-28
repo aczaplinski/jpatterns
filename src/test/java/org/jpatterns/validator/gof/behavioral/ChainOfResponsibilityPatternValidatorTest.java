@@ -48,6 +48,12 @@ public class ChainOfResponsibilityPatternValidatorTest {
                         "           }",
                         "       }",
                         "   }",
+                        "   @ChainOfResponsibilityPattern.ConcreteHandler(defaultHandler = true)",
+                        "   class Handler3 implements Handler {",
+                        "       @Override",
+                        "       public void operation() {",
+                        "       }",
+                        "   }",
                         "}"));
         assertThat(compilation).succeededWithoutWarnings();
     }
@@ -90,6 +96,6 @@ public class ChainOfResponsibilityPatternValidatorTest {
         assertThat(compilation).hadWarningContaining(
                 "ConcreteHandler should be a subtype of");
         assertThat(compilation).hadWarningContaining(
-                "ConcreteHandler should store Handler");
+                "ConcreteHandler that is not a default Handler should store Handler");
     }
 }
