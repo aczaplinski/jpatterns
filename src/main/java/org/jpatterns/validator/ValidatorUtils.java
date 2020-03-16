@@ -1,6 +1,7 @@
 package org.jpatterns.validator;
 
 import org.jpatterns.core.ValidationErrorLevel;
+import org.jpatterns.gof.behavioral.IteratorPattern;
 
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -11,15 +12,22 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ValidatorUtils {
     private Elements elements;
     private Messager messager;
     private Types types;
+    private static final Map<String, Set<Class<? extends Annotation>>> hardcodedAnnotations =
+            Stream.<Map.Entry<Class<?>, Set<Class<? extends Annotation>>>>of(
+            Map.entry(Iterator.class, Set.of(IteratorPattern.Iterator.class)),
+            Map.entry(AbstractCollection.class, Set.of(IteratorPattern.Aggregate.class))
+    ).collect(Collectors.toMap(
+            entry -> entry.getKey().getName(),
+            Map.Entry::getValue
+    ));
 
     public ValidatorUtils(ProcessingEnvironment processingEnv){
         elements = processingEnv.getElementUtils();
@@ -254,8 +262,11 @@ public class ValidatorUtils {
     }
 
     private boolean isAnnotatedWithAnyOf(Element element, Class<? extends Annotation>[] annotations) {
+        Set<Class<? extends Annotation>> elementHardcodedAnnotations =
+                hardcodedAnnotations.getOrDefault(element.toString(), Collections.emptySet());
         return Arrays.stream(annotations)
-                .anyMatch(annotation -> element.getAnnotation(annotation) != null);
+                .anyMatch(annotation -> elementHardcodedAnnotations.contains(annotation)
+                                        || element.getAnnotation(annotation) != null);
     }
 
     private boolean isMethodReturningTypeAnnotatedWithAnyOf(Element element,

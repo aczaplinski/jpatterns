@@ -99,4 +99,39 @@ public class IteratorPatternValidatorTest {
         assertThat(compilation).hadWarningContaining("Aggregate should contain");
         assertThat(compilation).hadWarningContaining("ConcreteAggregate should contain");
     }
+
+    @Test
+    public void testJavaUtilIterator() {
+        Compilation compilation = javac()
+                .withProcessors(new PatternValidatingAnnotationProcessor())
+                .compile(JavaFileObjects.forSourceLines(
+                        "Test",
+                        "package org.jpatterns.gof.behavioral;",
+                        "import java.util.Iterator;",
+                        "class Test {",
+                        "   @IteratorPattern.Aggregate",
+                        "   abstract static class Aggregate {",
+                        "       abstract Iterator iterator();",
+                        "   }",
+                        "   @IteratorPattern.ConcreteAggregate",
+                        "   static class ConcreteAggregate extends Aggregate {",
+                        "       @Override",
+                        "       Iterator iterator() {",
+                        "           return new ConcreteIterator();",
+                        "       }",
+                        "   }",
+                        "   @IteratorPattern.ConcreteIterator",
+                        "   static class ConcreteIterator implements Iterator<String> {",
+                        "       @Override",
+                        "       public String next() {",
+                        "           throw new RuntimeException();",
+                        "       }",
+                        "       @Override",
+                        "       public boolean hasNext() {",
+                        "           return false;",
+                        "       }",
+                        "   }",
+                        "}"));
+        assertThat(compilation).succeededWithoutWarnings();
+    }
 }
