@@ -134,4 +134,24 @@ public class IteratorPatternValidatorTest {
                         "}"));
         assertThat(compilation).succeededWithoutWarnings();
     }
+
+    @Test
+    public void testNotOverriddenIteratorMethod() {
+        Compilation compilation = javac()
+                .withProcessors(new PatternValidatingAnnotationProcessor())
+                .compile(JavaFileObjects.forSourceLines(
+                        "Test",
+                        "package org.jpatterns.gof.behavioral;",
+                        "import java.util.Iterator;",
+                        "class Test {",
+                        "   @IteratorPattern.Aggregate",
+                        "   abstract static class Aggregate {",
+                        "       abstract Iterator iterator();",
+                        "   }",
+                        "   @IteratorPattern.Aggregate",
+                        "   static abstract class SpecializedAggregate extends Aggregate {",
+                        "   }",
+                        "}"));
+        assertThat(compilation).succeededWithoutWarnings();
+    }
 }

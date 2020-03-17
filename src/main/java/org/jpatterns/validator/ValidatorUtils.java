@@ -141,9 +141,7 @@ public class ValidatorUtils {
     public final void validateContainsMethodReturningTypeAnnotatedWithAnyOf(Element annotatedElement,
                                                              Class<? extends Annotation> annotation,
                                                              Class<? extends Annotation> ... returnTypeAnnotations) {
-        if(annotatedElement.getEnclosedElements()
-                .stream()
-                .noneMatch(element -> isMethodReturningTypeAnnotatedWithAnyOf(element, returnTypeAnnotations))) {
+        if(!containsMethodReturningTypeAnnotatedWithAnyOf(annotatedElement, returnTypeAnnotations)) {
             printMessage(
                     annotation.getSimpleName() +
                             " %1$s contain a method returning " +
@@ -269,8 +267,22 @@ public class ValidatorUtils {
                 .orElse(false);
     }
 
+    private boolean containsMethodReturningTypeAnnotatedWithAnyOf(Element element,
+                                                                 Class<? extends Annotation>[] returnTypeAnnotations) {
+        return element.getEnclosedElements().stream()
+                .anyMatch(candidateMethod ->
+                        isMethodReturningTypeAnnotatedWithAnyOf(candidateMethod, returnTypeAnnotations))
+                ||
+                types.directSupertypes(element.asType()).stream()
+                        .anyMatch(supertypeCandidate ->
+                                containsMethodReturningTypeAnnotatedWithAnyOf(
+                                        types.asElement(
+                                                supertypeCandidate),
+                                        returnTypeAnnotations));
+    }
+
     public boolean containsFieldOfTypeAnnotatedWith(Element element,
-                                                     Class<? extends Annotation> soughtTypeAnnotation) {
+                                                    Class<? extends Annotation> soughtTypeAnnotation) {
         return element.getEnclosedElements().stream()
                 .anyMatch(candidateField ->
                         candidateField.getKind() == ElementKind.FIELD &&
