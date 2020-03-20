@@ -109,4 +109,24 @@ public class DecoratorPatternValidatorTest {
                         "}"));
         assertThat(compilation).succeededWithoutWarnings();
     }
+
+    @Test
+    public void testJavaIoFilterInputStream() {
+        Compilation compilation = javac()
+                .withProcessors(new PatternValidatingAnnotationProcessor())
+                .compile(JavaFileObjects.forSourceLines(
+                        "Test",
+                        "package org.jpatterns.gof.structural;",
+                        "import java.io.FilterInputStream;",
+                        "import java.io.InputStream;",
+                        "class Test {",
+                        "   @DecoratorPattern.ConcreteDecorator",
+                        "   class TestInputStream extends FilterInputStream {",
+                        "       public TestInputStream(InputStream in) {",
+                        "           super(in);",
+                        "       }",
+                        "   }",
+                        "}"));
+        assertThat(compilation).succeededWithoutWarnings();
+    }
 }

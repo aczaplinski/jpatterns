@@ -18,7 +18,7 @@ public class StatePatternValidator implements PatternValidator {
     public void process(RoundEnvironment roundEnv) {
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(StatePattern.Context.class)) {
-            validatorUtils.validateContainsFieldOfTypeAnnotatedWith(annotatedElement,
+            validatorUtils.validateContainsFieldOfTypeAnnotatedWithAnyOf(annotatedElement,
                     StatePattern.Context.class,
                     StatePattern.State.class);
         }

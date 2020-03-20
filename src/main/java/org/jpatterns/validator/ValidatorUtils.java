@@ -35,7 +35,7 @@ public class ValidatorUtils {
 
     public void validateIsConcreteClass(Element annotatedType,
                                         Class<? extends Annotation> annotation) {
-        if(annotatedType.getKind() == ElementKind.CLASS) {
+        if(annotatedType.getKind().isClass()) {
             validateElementModifiersDoNotContain(annotatedType, annotation, Modifier.ABSTRACT);
         } else {
             printMessage(annotation.getSimpleName() + " %1$s not be an interface.",
@@ -46,7 +46,7 @@ public class ValidatorUtils {
 
     public void validateIsAbstractClassOrInterface(Element annotatedType,
                                                     Class<? extends Annotation> annotation) {
-        if(annotatedType.getKind() == ElementKind.CLASS
+        if(annotatedType.getKind().isClass()
                 && !annotatedType.getModifiers().contains(Modifier.ABSTRACT)) {
             printMessage(annotation.getSimpleName() + " %1$s be an abstract class or an interface.",
                     annotatedType,
@@ -153,14 +153,16 @@ public class ValidatorUtils {
         }
     }
 
-    public void validateContainsFieldOfTypeAnnotatedWith(Element element,
-                                                         Class<? extends Annotation> annotation,
-                                                         Class<? extends Annotation> soughtTypeAnnotation) {
-        if(!containsFieldOfTypeAnnotatedWith(element, soughtTypeAnnotation)) {
+    @SafeVarargs
+    public final void validateContainsFieldOfTypeAnnotatedWithAnyOf(Element element,
+                                                              Class<? extends Annotation> annotation,
+                                                              Class<? extends Annotation> ... soughtTypeAnnotations) {
+        if(!containsFieldOfTypeAnnotatedWithAnyOf(element, soughtTypeAnnotations)) {
             printMessage(annotation.getSimpleName() +
                             " %1$s store " +
-                            soughtTypeAnnotation.getSimpleName() +
-                            " reference",
+                            (soughtTypeAnnotations.length == 1 ? "" : "one of: ") +
+                            toString(soughtTypeAnnotations) +
+                            " reference.",
                     element,
                     annotation);
         }
@@ -281,20 +283,21 @@ public class ValidatorUtils {
                                         returnTypeAnnotations));
     }
 
-    public boolean containsFieldOfTypeAnnotatedWith(Element element,
-                                                    Class<? extends Annotation> soughtTypeAnnotation) {
+    @SafeVarargs
+    public final boolean containsFieldOfTypeAnnotatedWithAnyOf(Element element,
+                                                         Class<? extends Annotation> ... soughtTypeAnnotations) {
         return element.getEnclosedElements().stream()
                 .anyMatch(candidateField ->
                         candidateField.getKind() == ElementKind.FIELD &&
                                 isAnnotatedWithAnyOf(candidateField.asType(),
-                                        soughtTypeAnnotation))
+                                        soughtTypeAnnotations))
                 ||
                 types.directSupertypes(element.asType()).stream()
                         .anyMatch(supertypeCandidate ->
-                                containsFieldOfTypeAnnotatedWith(
+                                containsFieldOfTypeAnnotatedWithAnyOf(
                                         types.asElement(
                                                 supertypeCandidate),
-                                        soughtTypeAnnotation));
+                                        soughtTypeAnnotations));
     }
 
     private String toString(Class<? extends Annotation>[] annotations) {

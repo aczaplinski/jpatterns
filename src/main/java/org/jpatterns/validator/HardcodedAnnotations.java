@@ -1,7 +1,12 @@
 package org.jpatterns.validator;
 
 import org.jpatterns.gof.behavioral.IteratorPattern;
+import org.jpatterns.gof.structural.DecoratorPattern;
 
+import java.io.FilterInputStream;
+import java.io.FilterOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,7 +34,11 @@ class HardcodedAnnotations {
                     Map.entry(Map.class, Set.of(IteratorPattern.Aggregate.class)),
                     Map.entry(AbstractMap.class, Set.of(IteratorPattern.Aggregate.class)),
                     Map.entry(SortedMap.class, Set.of(IteratorPattern.Aggregate.class)),
-                    Map.entry(NavigableMap.class, Set.of(IteratorPattern.Aggregate.class))
+                    Map.entry(NavigableMap.class, Set.of(IteratorPattern.Aggregate.class)),
+                    Map.entry(InputStream.class, Set.of(DecoratorPattern.Component.class)),
+                    Map.entry(FilterInputStream.class, Set.of(DecoratorPattern.ConcreteDecorator.class)),
+                    Map.entry(OutputStream.class, Set.of(DecoratorPattern.Component.class)),
+                    Map.entry(FilterOutputStream.class, Set.of(DecoratorPattern.ConcreteDecorator.class))
             ).collect(Collectors.toMap(
                     entry -> entry.getKey().getName(),
                     Map.Entry::getValue

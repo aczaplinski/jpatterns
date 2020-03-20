@@ -43,6 +43,10 @@ public class ObserverPatternValidator implements PatternValidator {
                     ObserverPattern.ConcreteSubject.class,
                     ObserverPattern.ConcreteSubject.class,
                     ObserverPattern.Subject.class);
+            validatorUtils.validateContainsFieldOfTypeAnnotatedWithAnyOf(annotatedElement,
+                    ObserverPattern.ConcreteSubject.class,
+                    ObserverPattern.Observer.class,
+                    ObserverPattern.ConcreteObserver.class);
         }
     }
 }

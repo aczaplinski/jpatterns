@@ -29,6 +29,7 @@ public class ObserverPatternValidatorTest {
                         "   }",
                         "   @ObserverPattern.ConcreteSubject",
                         "   class ConcreteSubject implements Subject {",
+                        "       private Observer observer = new ConcreteObserver();",
                         "   }",
                         "}"));
         assertThat(compilation).succeededWithoutWarnings();
@@ -53,6 +54,7 @@ public class ObserverPatternValidatorTest {
                         "   }",
                         "   @ObserverPattern.ConcreteSubject",
                         "   class ConcreteSubject implements Comparable<Subject> {",
+                        "       private Observer observer;",
                         "       @Override",
                         "       public int compareTo(Subject subject) {",
                         "           return 0;",

@@ -43,7 +43,7 @@ public class MediatorPatternValidator implements PatternValidator {
                     MediatorPattern.ConcreteColleague.class,
                     MediatorPattern.ConcreteColleague.class,
                     MediatorPattern.Colleague.class);
-            validatorUtils.validateContainsFieldOfTypeAnnotatedWith(annotatedElement,
+            validatorUtils.validateContainsFieldOfTypeAnnotatedWithAnyOf(annotatedElement,
                     MediatorPattern.ConcreteColleague.class,
                     MediatorPattern.Mediator.class);
         }

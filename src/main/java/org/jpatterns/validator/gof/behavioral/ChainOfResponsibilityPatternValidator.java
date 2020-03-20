@@ -36,7 +36,7 @@ public class ChainOfResponsibilityPatternValidator implements PatternValidator {
     private void validateIsDefaultHandlerOrContainsNextHandlerField(Element annotatedConcreteHandler) {
         if(!annotatedConcreteHandler.getAnnotation(ChainOfResponsibilityPattern.ConcreteHandler.class)
                 .defaultHandler()) {
-            if(!validatorUtils.containsFieldOfTypeAnnotatedWith(annotatedConcreteHandler,
+            if(!validatorUtils.containsFieldOfTypeAnnotatedWithAnyOf(annotatedConcreteHandler,
                     ChainOfResponsibilityPattern.Handler.class)) {
                 validatorUtils.printMessage(
                         "ConcreteHandler that is not a default Handler %1$s store Handler reference",
