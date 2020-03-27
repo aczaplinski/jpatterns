@@ -18,7 +18,7 @@ public class StrategyPatternValidator implements PatternValidator {
     public void process(RoundEnvironment roundEnv) {
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(StrategyPattern.Context.class)) {
-            validatorUtils.validateTypeContainsElementAnnotatedWith(annotatedElement,
+            validatorUtils.validateTypeContainsElementAnnotatedWithAnyOf(annotatedElement,
                     StrategyPattern.Context.class,
                     StrategyPattern.StrategyField.class);
         }
@@ -27,6 +27,9 @@ public class StrategyPatternValidator implements PatternValidator {
             validatorUtils.validateEnclosingTypeIsAnnotatedWithAnyOf(annotatedElement,
                     StrategyPattern.StrategyField.class,
                     StrategyPattern.Context.class);
+            validatorUtils.validateFieldTypeIsAnnotatedWith(annotatedElement,
+                    StrategyPattern.StrategyField.class,
+                    StrategyPattern.Strategy.class);
         }
         for(Element annotatedElement :
                 roundEnv.getElementsAnnotatedWith(StrategyPattern.Strategy.class)) {

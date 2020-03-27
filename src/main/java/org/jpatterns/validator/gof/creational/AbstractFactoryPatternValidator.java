@@ -6,7 +6,6 @@ import org.jpatterns.validator.ValidatorUtils;
 
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 
 public class AbstractFactoryPatternValidator implements PatternValidator {
@@ -21,7 +20,7 @@ public class AbstractFactoryPatternValidator implements PatternValidator {
                 roundEnv.getElementsAnnotatedWith(AbstractFactoryPattern.AbstractFactory.class)) {
             validatorUtils.validateIsAbstractClassOrInterface(annotatedElement,
                     AbstractFactoryPattern.AbstractFactory.class);
-            validatorUtils.validateTypeContainsElementAnnotatedWith(annotatedElement,
+            validatorUtils.validateTypeContainsElementAnnotatedWithAnyOf(annotatedElement,
                     AbstractFactoryPattern.AbstractFactory.class,
                     AbstractFactoryPattern.FactoryMethod.class);
         }
@@ -38,7 +37,7 @@ public class AbstractFactoryPatternValidator implements PatternValidator {
                     AbstractFactoryPattern.ConcreteFactory.class,
                     AbstractFactoryPattern.ConcreteFactory.class,
                     AbstractFactoryPattern.AbstractFactory.class);
-            validatorUtils.validateTypeContainsElementAnnotatedWith(annotatedElement,
+            validatorUtils.validateTypeContainsElementAnnotatedWithAnyOf(annotatedElement,
                     AbstractFactoryPattern.ConcreteFactory.class,
                     AbstractFactoryPattern.FactoryMethod.class);
         }
@@ -61,7 +60,10 @@ public class AbstractFactoryPatternValidator implements PatternValidator {
                     AbstractFactoryPattern.AbstractFactory.class,
                     AbstractFactoryPattern.ConcreteFactory.class);
             validateFactoryIsAbstractOrFactoryMethodHasOverride(annotatedElement);
-            validateFactoryMethodReturnsProduct(annotatedElement);
+            validatorUtils.validateMethodReturnsTypeAnnotatedWithAnyOf(annotatedElement,
+                    AbstractFactoryPattern.FactoryMethod.class,
+                    AbstractFactoryPattern.AbstractProduct.class,
+                    AbstractFactoryPattern.ConcreteProduct.class);
         }
     }
 
@@ -72,19 +74,6 @@ public class AbstractFactoryPatternValidator implements PatternValidator {
         && annotatedFactoryMethod.getAnnotation(Override.class) == null) {
             validatorUtils.printMessage("Factory Method in Concrete Factory %1$s override" +
                     " a Factory Method from its superclass, so it %1$s also be annotated with @Override",
-                    annotatedFactoryMethod,
-                    AbstractFactoryPattern.FactoryMethod.class);
-        }
-    }
-
-    private void validateFactoryMethodReturnsProduct(Element annotatedFactoryMethod) {
-        Element returnedElement = validatorUtils.getReturnedElement(
-                (ExecutableElement) annotatedFactoryMethod);
-        if(returnedElement == null
-                || (returnedElement.getAnnotation(AbstractFactoryPattern.AbstractProduct.class) == null
-                    && returnedElement.getAnnotation(AbstractFactoryPattern.ConcreteProduct.class) == null)) {
-            validatorUtils.printMessage("Factory Method %1$s return a value of type annotated" +
-                            " with @AbstractProduct or @ConcreteProduct",
                     annotatedFactoryMethod,
                     AbstractFactoryPattern.FactoryMethod.class);
         }

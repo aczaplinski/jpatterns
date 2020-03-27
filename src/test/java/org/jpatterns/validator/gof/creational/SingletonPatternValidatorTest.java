@@ -74,9 +74,53 @@ public class SingletonPatternValidatorTest {
                         "   }",
                         "}"));
         assertThat(compilation).failed();
-        assertThat(compilation).hadErrorCount(3);
+        assertThat(compilation).hadErrorCount(4);
         assertThat(compilation).hadErrorContaining("must be static");
         assertThat(compilation).hadErrorContaining("must not be protected");
+        assertThat(compilation).hadErrorContaining("must return a value of type annotated with");
         assertThat(compilation).hadErrorContaining("must reside in a class");
+    }
+
+    @Test
+    public void testPublicConstructor() {
+        Compilation compilation = javac()
+                .withProcessors(new PatternValidatingAnnotationProcessor())
+                .compile(JavaFileObjects.forSourceLines(
+                        "Test",
+                        "package org.jpatterns.gof.creational;",
+                        "import static org.jpatterns.core.ValidationErrorLevel.*;",
+                        "class Test {",
+                        "   @SingletonPattern.Singleton(validationErrorLevel = ERROR)",
+                        "   static class Singleton {",
+                        "       private static final Singleton INSTANCE = new Singleton();",
+                        "       public Singleton() {",
+                        "       }",
+                        "       @SingletonPattern.SingletonMethod(validationErrorLevel = ERROR)",
+                        "       static Singleton singletonMethod() {",
+                        "           return INSTANCE;",
+                        "       }",
+                        "   }",
+                        "}"));
+        assertThat(compilation).failed();
+        assertThat(compilation).hadErrorCount(1);
+        assertThat(compilation).hadErrorContaining("constructor must be private");
+    }
+
+    @Test
+    public void testEnumImplementation() {
+        Compilation compilation = javac()
+                .withProcessors(new PatternValidatingAnnotationProcessor())
+                .compile(JavaFileObjects.forSourceLines(
+                        "Test",
+                        "package org.jpatterns.gof.creational;",
+                        "import static org.jpatterns.core.ValidationErrorLevel.*;",
+                        "class Test {",
+                        "   @SingletonPattern.Singleton",
+                        "   static enum Singleton {",
+                        "       @SingletonPattern.SingletonField",
+                        "       INSTANCE;",
+                        "   }",
+                        "}"));
+        assertThat(compilation).succeededWithoutWarnings();
     }
 }

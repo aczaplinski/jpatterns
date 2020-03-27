@@ -29,6 +29,10 @@ public class ValidatorUtils {
         return elements;
     }
 
+    public Messager getMessager() {
+        return messager;
+    }
+
     public Types getTypes() {
         return types;
     }
@@ -105,17 +109,19 @@ public class ValidatorUtils {
         }
     }
 
-    public void validateTypeContainsElementAnnotatedWith(Element annotatedElement,
-                                                         Class<? extends Annotation> annotation,
-                                                         Class<? extends Annotation> subelementAnnotation) {
+    @SafeVarargs
+    public final void validateTypeContainsElementAnnotatedWithAnyOf(Element annotatedElement,
+                                                              Class<? extends Annotation> annotation,
+                                                              Class<? extends Annotation> ... subelementAnnotations) {
         if(annotatedElement.getEnclosedElements()
                 .stream()
                 .noneMatch(potentialAnnotatedSubelement ->
-                        potentialAnnotatedSubelement.getAnnotation(subelementAnnotation) != null)) {
-            printMessage(annotation.getSimpleName()
-                            + " %1$s contain a "
-                            + subelementAnnotation.getSimpleName()
-                            + ".",
+                        isAnnotatedWithAnyOf(potentialAnnotatedSubelement, subelementAnnotations))) {
+            printMessage(annotation.getSimpleName() +
+                            " %1$s contain " +
+                            (subelementAnnotations.length == 1 ? "a " : "one of: ") +
+                            toString(subelementAnnotations) +
+                            ".",
                     annotatedElement,
                     annotation);
         }
@@ -154,6 +160,22 @@ public class ValidatorUtils {
     }
 
     @SafeVarargs
+    public final void validateMethodReturnsTypeAnnotatedWithAnyOf(Element methodElement,
+                                                            Class<? extends Annotation> annotation,
+                                                            Class<? extends Annotation> ... returnTypeAnnotations) {
+        if(!isMethodReturningTypeAnnotatedWithAnyOf(methodElement, returnTypeAnnotations)) {
+            printMessage(annotation.getSimpleName() +
+                            " %1$s return a value of type annotated" +
+                            " with " +
+                            (returnTypeAnnotations.length == 1 ? "" : "one of: ") +
+                            toString(returnTypeAnnotations) +
+                            ".",
+                    methodElement,
+                    annotation);
+        }
+    }
+
+    @SafeVarargs
     public final void validateContainsFieldOfTypeAnnotatedWithAnyOf(Element element,
                                                               Class<? extends Annotation> annotation,
                                                               Class<? extends Annotation> ... soughtTypeAnnotations) {
@@ -164,6 +186,18 @@ public class ValidatorUtils {
                             toString(soughtTypeAnnotations) +
                             " reference.",
                     element,
+                    annotation);
+        }
+    }
+
+    public void validateFieldTypeIsAnnotatedWith(Element fieldElement,
+                                                 Class<? extends Annotation> annotation,
+                                                 Class<? extends Annotation> soughtTypeAnnotation) {
+        if(!isAnnotatedWithAnyOf(fieldElement.asType(), soughtTypeAnnotation)) {
+            printMessage(annotation.getSimpleName() +
+                         "'s type %1$s be annotated with " +
+                         soughtTypeAnnotation.getSimpleName(),
+                    fieldElement,
                     annotation);
         }
     }
@@ -216,8 +250,8 @@ public class ValidatorUtils {
                         "Supplied Element is not annotated with any of the given annotations"));
     }
 
-    private ValidationErrorLevel getValidationErrorLevel(Element annotatedElement,
-                                                         Class<? extends  Annotation> annotation) {
+    public ValidationErrorLevel getValidationErrorLevel(Element annotatedElement,
+                                                        Class<? extends Annotation> annotation) {
         try {
             /* Annotations cannot extend nor implement anything, so there is no way to specify a common interface
                 containing method validationErrorLevel(). That's why reflection is used here.

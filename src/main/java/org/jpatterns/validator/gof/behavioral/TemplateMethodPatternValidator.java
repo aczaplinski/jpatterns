@@ -21,10 +21,10 @@ public class TemplateMethodPatternValidator implements PatternValidator {
                 roundEnv.getElementsAnnotatedWith(TemplateMethodPattern.AbstractClass.class)) {
             validatorUtils.validateIsAbstractClassOrInterface(annotatedElement,
                     TemplateMethodPattern.AbstractClass.class);
-            validatorUtils.validateTypeContainsElementAnnotatedWith(annotatedElement,
+            validatorUtils.validateTypeContainsElementAnnotatedWithAnyOf(annotatedElement,
                     TemplateMethodPattern.AbstractClass.class,
                     TemplateMethodPattern.TemplateMethod.class);
-            validatorUtils.validateTypeContainsElementAnnotatedWith(annotatedElement,
+            validatorUtils.validateTypeContainsElementAnnotatedWithAnyOf(annotatedElement,
                     TemplateMethodPattern.AbstractClass.class,
                     TemplateMethodPattern.PrimitiveOperation.class);
         }
@@ -36,7 +36,7 @@ public class TemplateMethodPatternValidator implements PatternValidator {
                     TemplateMethodPattern.ConcreteClass.class,
                     TemplateMethodPattern.ConcreteClass.class,
                     TemplateMethodPattern.AbstractClass.class);
-            validatorUtils.validateTypeContainsElementAnnotatedWith(annotatedElement,
+            validatorUtils.validateTypeContainsElementAnnotatedWithAnyOf(annotatedElement,
                     TemplateMethodPattern.ConcreteClass.class,
                     TemplateMethodPattern.PrimitiveOperation.class);
         }

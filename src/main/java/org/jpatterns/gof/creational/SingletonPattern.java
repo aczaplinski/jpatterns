@@ -49,6 +49,15 @@ public @interface SingletonPattern {
     String comment() default "";
   }
 
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target(ElementType.FIELD)
+  @Documented
+  @interface SingletonField {
+    Class[] participants() default {};
+    ValidationErrorLevel validationErrorLevel() default WARNING;
+    String comment() default "";
+  }
+
   enum Variation {
     LAZY, EAGER
   }
