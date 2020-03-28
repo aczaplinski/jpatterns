@@ -27,6 +27,7 @@ class HardcodedAnnotations {
                     Map.entry(AbstractCollection.class, Set.of(IteratorPattern.Aggregate.class)),
                     Map.entry(List.class, Set.of(IteratorPattern.Aggregate.class)),
                     Map.entry(AbstractList.class, Set.of(IteratorPattern.Aggregate.class)),
+                    Map.entry(AbstractSequentialList.class, Set.of(IteratorPattern.Aggregate.class)),
                     Map.entry(Set.class, Set.of(IteratorPattern.Aggregate.class)),
                     Map.entry(AbstractSet.class, Set.of(IteratorPattern.Aggregate.class)),
                     Map.entry(SortedSet.class, Set.of(IteratorPattern.Aggregate.class)),
