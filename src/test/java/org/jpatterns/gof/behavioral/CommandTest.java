@@ -2,13 +2,15 @@ package org.jpatterns.gof.behavioral;
 
 import static org.junit.Assert.assertTrue;
 
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.Test;
 
 /**
  * @author Michael Hunger
  * @since 2010-07-14
  */
-@CommandPattern.Invoker(participants = CommandTest.Command.class)
+@CommandPattern.Invoker(participants = CommandTest.Command.class,
+        validationErrorLevel = ValidationErrorLevel.NONE)
 public class CommandTest {
   @Test
   public void executeCommand() {
@@ -18,12 +20,15 @@ public class CommandTest {
     assertTrue(receiver.ran);
   }
 
-  @CommandPattern.Command(participants = CommandReceiver.class)
+  @CommandPattern.Command(participants = CommandReceiver.class,
+          validationErrorLevel = ValidationErrorLevel.ERROR)
   interface Command {
     void execute();
   }
 
-  @CommandPattern.ConcreteCommand(comment = "This is our TestCommand")
+  @CommandPattern.ConcreteCommand(comment = "This is our TestCommand",
+          validationErrorLevel = ValidationErrorLevel.ERROR)
+  static
   class TestCommand implements Command {
     private CommandReceiver receiver;
 
@@ -37,7 +42,7 @@ public class CommandTest {
   }
 
   @CommandPattern.Receiver(participants = Command.class)
-  private class CommandReceiver {
+  private static class CommandReceiver {
     private boolean ran;
 
     void receive() {

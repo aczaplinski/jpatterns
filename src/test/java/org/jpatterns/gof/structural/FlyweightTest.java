@@ -1,5 +1,6 @@
 package org.jpatterns.gof.structural;
 
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.Test;
 
 import java.awt.*;
@@ -22,14 +23,17 @@ public class FlyweightTest {
     Argabuthon, EroticonVI, Gagrakacka, Krikkit, Magrathea, NowWhat, ViltvodleVI, Vod, Xaxis
   }
 
-  @FlyweightPattern.Flyweight(participants = {AnonymousAlien.class, KnownAlien.class})
+  @FlyweightPattern.Flyweight(participants = {AnonymousAlien.class, KnownAlien.class},
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private interface Alien {
     String getName();
   }
 
 
-  @FlyweightPattern.ConcreteFlyweight(participants = {Alien.class, KnownAlien.class})
-  @FlyweightPattern.FlyweightFactory(participants = {Alien.class, KnownAlien.class})
+  @FlyweightPattern.ConcreteFlyweight(participants = {Alien.class, KnownAlien.class},
+    validationErrorLevel = ValidationErrorLevel.ERROR)
+  @FlyweightPattern.FlyweightFactory(participants = {Alien.class, KnownAlien.class},
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class AnonymousAlien implements Alien {
     private static final Map<Alien, WeakReference<Alien>> anonymousAliens = new HashMap<>();
 
@@ -48,7 +52,7 @@ public class FlyweightTest {
 
       WeakReference<Alien> ref = anonymousAliens.get(tmp);
 
-      Alien alien = null;
+      Alien alien;
       if (ref == null) {
         alien = tmp;
         anonymousAliens.put(alien, new WeakReference<>(alien));
@@ -84,7 +88,8 @@ public class FlyweightTest {
     }
   }
 
-  @FlyweightPattern.UnsharedConcreteFlyweight(participants = {Alien.class, AnonymousAlien.class})
+  @FlyweightPattern.UnsharedConcreteFlyweight(participants = {Alien.class, AnonymousAlien.class},
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class KnownAlien implements Alien {
     private String name;
     private AlienRace alienRace;

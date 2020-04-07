@@ -1,5 +1,6 @@
 package org.jpatterns.gof.creational;
 
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.Test;
 
 import java.util.*;
@@ -10,12 +11,14 @@ import java.util.*;
  */
 public class FactoryMethodTest {
 
-  @FactoryMethodPattern.Product(participants = NumberPrinter.class)
+  @FactoryMethodPattern.Product(participants = NumberPrinter.class,
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private interface NumberGenerator {
     int next();
   }
 
-  @FactoryMethodPattern.Creator(participants = NumberGenerator.class)
+  @FactoryMethodPattern.Creator(participants = NumberGenerator.class,
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private static abstract class NumberPrinter {
 
     public void printNumbers(int _upto) {
@@ -32,7 +35,7 @@ public class FactoryMethodTest {
     protected abstract NumberGenerator createNumberGenerator();
   }
 
-  @FactoryMethodPattern.ConcreteProduct
+  @FactoryMethodPattern.ConcreteProduct(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class PrimeGenerator implements NumberGenerator {
     int number = 0;
 
@@ -54,7 +57,7 @@ public class FactoryMethodTest {
     }
   }
 
-  @FactoryMethodPattern.ConcreteCreator
+  @FactoryMethodPattern.ConcreteCreator(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class PrimePrinter extends NumberPrinter {
 
     @Override
@@ -63,7 +66,7 @@ public class FactoryMethodTest {
     }
   }
 
-  @FactoryMethodPattern.ConcreteProduct
+  @FactoryMethodPattern.ConcreteProduct(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class FibonacciGenerator implements NumberGenerator {
     private int fibPos = 0;
 
@@ -77,7 +80,7 @@ public class FactoryMethodTest {
     }
   }
 
-  @FactoryMethodPattern.ConcreteCreator
+  @FactoryMethodPattern.ConcreteCreator(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class FibonacciPrinter extends NumberPrinter {
 
     @Override

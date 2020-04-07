@@ -2,6 +2,8 @@ package org.jpatterns.gof.behavioral;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
+
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.Test;
 
 import java.io.*;
@@ -12,9 +14,9 @@ import java.sql.*;
  * @since 2010-08-09
  */
 public class TemplateMethodTest {
-  @TemplateMethodPattern.AbstractClass
+  @TemplateMethodPattern.AbstractClass(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static abstract class CloseHelper {
-    @TemplateMethodPattern.TemplateMethod
+    @TemplateMethodPattern.TemplateMethod(validationErrorLevel = ValidationErrorLevel.ERROR)
     public final Object run(Object[] params) throws Exception {
       setUp(params);
       Exception ex = null;
@@ -34,17 +36,17 @@ public class TemplateMethodTest {
       throw ex;
     }
 
-    @TemplateMethodPattern.PrimitiveOperation
+    @TemplateMethodPattern.PrimitiveOperation(validationErrorLevel = ValidationErrorLevel.ERROR)
     protected abstract void setUp(Object[] params) throws Exception;
 
-    @TemplateMethodPattern.PrimitiveOperation
+    @TemplateMethodPattern.PrimitiveOperation(validationErrorLevel = ValidationErrorLevel.ERROR)
     protected abstract Object doExecute(Object[] params) throws Exception;
 
-    @TemplateMethodPattern.PrimitiveOperation
+    @TemplateMethodPattern.PrimitiveOperation(validationErrorLevel = ValidationErrorLevel.ERROR)
     protected abstract void tearDown(Object[] params) throws Exception;
   }
 
-  @TemplateMethodPattern.ConcreteClass
+  @TemplateMethodPattern.ConcreteClass(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class DBHelper extends CloseHelper {
     private final Connection con;
     private Statement st;
@@ -53,17 +55,20 @@ public class TemplateMethodTest {
       this.con = con;
     }
 
-    @TemplateMethodPattern.PrimitiveOperation
+    @TemplateMethodPattern.PrimitiveOperation(validationErrorLevel = ValidationErrorLevel.ERROR)
+    @Override
     protected void setUp(Object[] params) throws SQLException {
       st = con.createStatement();
     }
 
-    @TemplateMethodPattern.PrimitiveOperation
+    @TemplateMethodPattern.PrimitiveOperation(validationErrorLevel = ValidationErrorLevel.ERROR)
+    @Override
     protected Integer doExecute(Object[] params) throws SQLException {
       return st.executeUpdate((String) params[0]);
     }
 
-    @TemplateMethodPattern.PrimitiveOperation
+    @TemplateMethodPattern.PrimitiveOperation(validationErrorLevel = ValidationErrorLevel.ERROR)
+    @Override
     protected void tearDown(Object[] params) throws SQLException {
       st.close();
     }

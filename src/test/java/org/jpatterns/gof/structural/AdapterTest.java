@@ -1,6 +1,8 @@
 package org.jpatterns.gof.structural;
 
 import static org.junit.Assert.assertEquals;
+
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.Test;
 
 /**
@@ -26,7 +28,8 @@ public class AdapterTest {
     }
   }
 
-  @AdapterPattern.Adapter(AdapterPattern.Variation.OBJECT)
+  @AdapterPattern.Adapter(value = AdapterPattern.Variation.OBJECT,
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class RapperObjectAdapter implements Singer {
     private final Rapper rapper;
 
@@ -44,7 +47,8 @@ public class AdapterTest {
   }
 
   @AdapterPattern.Adapter(value = AdapterPattern.Variation.CLASS,
-      participants = {Rapper.class, Singer.class})
+      participants = {Rapper.class, Singer.class},
+      validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class RapperClassAdapter extends Rapper
       implements Singer {
     public String sing() {

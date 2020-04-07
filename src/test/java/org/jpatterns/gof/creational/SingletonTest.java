@@ -1,6 +1,8 @@
 package org.jpatterns.gof.creational;
 
 import static junit.framework.Assert.assertSame;
+
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.Test;
 
 /**
@@ -16,15 +18,16 @@ public class SingletonTest {
     assertSame(singleton, singleton2);
   }
 
-  @SingletonPattern.Singleton(variation = SingletonPattern.Variation.EAGER)
+  @SingletonPattern.Singleton(variation = SingletonPattern.Variation.EAGER,
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   public static class Singleton {
     private final static Singleton INSTANCE = new Singleton();
 
     private Singleton() {
     }
 
-    @SingletonPattern.SingletonMethod
-    public static final Singleton getInstance() {
+    @SingletonPattern.SingletonMethod(validationErrorLevel = ValidationErrorLevel.ERROR)
+    public static Singleton getInstance() {
       return INSTANCE;
     }
   }

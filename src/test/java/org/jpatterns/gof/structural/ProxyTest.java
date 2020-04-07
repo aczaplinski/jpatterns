@@ -2,6 +2,8 @@ package org.jpatterns.gof.structural;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.Test;
 
 /**
@@ -33,8 +35,8 @@ public class ProxyTest {
     }
   }
 
-  @ProxyPattern.Subject(participants = {LutefiskProxy.class,
-      LutefiskImpl.class})
+  @ProxyPattern.Subject(participants = {LutefiskProxy.class, LutefiskImpl.class},
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private interface Lutefisk {
     void eatenBy(Norwegian eater);
 
@@ -43,7 +45,8 @@ public class ProxyTest {
 
   @ProxyPattern.Proxy(
       variation = ProxyPattern.Variation.STATIC_MANUAL,
-      type = ProxyPattern.Type.VIRTUAL)
+      type = ProxyPattern.Type.VIRTUAL,
+      validationErrorLevel = ValidationErrorLevel.ERROR)
   public static class LutefiskProxy implements Lutefisk {
     private Lutefisk realSubject;
 
@@ -59,7 +62,7 @@ public class ProxyTest {
     }
   }
 
-  @ProxyPattern.RealSubject
+  @ProxyPattern.RealSubject(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class LutefiskImpl implements Lutefisk {
     public void eatenBy(Norwegian eater) {
       eater.becomeSick();

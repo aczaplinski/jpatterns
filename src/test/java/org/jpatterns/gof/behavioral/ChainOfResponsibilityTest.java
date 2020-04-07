@@ -1,5 +1,6 @@
 package org.jpatterns.gof.behavioral;
 
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
@@ -25,7 +26,7 @@ public class ChainOfResponsibilityTest {
     }
   }
 
-  @ChainOfResponsibilityPattern.Handler
+  @ChainOfResponsibilityPattern.Handler(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static abstract class OrderHandler {
     protected OrderHandler successor;
 
@@ -46,7 +47,7 @@ public class ChainOfResponsibilityTest {
     }
   }
 
-  @ChainOfResponsibilityPattern.ConcreteHandler
+  @ChainOfResponsibilityPattern.ConcreteHandler(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class RegularOrderHandler extends OrderHandler {
     private static final float MAX_AMOUNT = 100.00f;
 
@@ -61,7 +62,7 @@ public class ChainOfResponsibilityTest {
     }
   }
 
-  @ChainOfResponsibilityPattern.ConcreteHandler
+  @ChainOfResponsibilityPattern.ConcreteHandler(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class BigOrderHandler extends OrderHandler {
     private static final float MAX_AMOUNT = 10000.00f;
 
@@ -76,7 +77,7 @@ public class ChainOfResponsibilityTest {
     }
   }
 
-  @ChainOfResponsibilityPattern.ConcreteHandler
+  @ChainOfResponsibilityPattern.ConcreteHandler(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class HugeOrderHandler extends OrderHandler {
     @Override
     protected boolean canHandle(Order _order) {

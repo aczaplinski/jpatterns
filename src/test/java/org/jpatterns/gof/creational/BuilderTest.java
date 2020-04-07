@@ -1,5 +1,6 @@
 package org.jpatterns.gof.creational;
 
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -33,7 +34,8 @@ public class BuilderTest {
     }
   }
 
-  @BuilderPattern.Builder(participants = {Guitar.class, GuitarMaker.class})
+  @BuilderPattern.Builder(participants = {Guitar.class, GuitarMaker.class},
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private static abstract class GuitarBuilder {
     protected Guitar guitar;
 
@@ -52,7 +54,7 @@ public class BuilderTest {
     public abstract void buildElements();
   }
 
-  @BuilderPattern.ConcreteBuilder
+  @BuilderPattern.ConcreteBuilder(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class SteviesGuitarBuilder extends GuitarBuilder {
 
     @Override
@@ -71,7 +73,7 @@ public class BuilderTest {
     }
   }
 
-  @BuilderPattern.ConcreteBuilder
+  @BuilderPattern.ConcreteBuilder(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class AngusGuitarBuilder extends GuitarBuilder {
 
     @Override
@@ -90,7 +92,7 @@ public class BuilderTest {
     }
   }
 
-  @BuilderPattern.Director
+  @BuilderPattern.Director(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class GuitarMaker {
     private GuitarBuilder guitarBuilder;
 

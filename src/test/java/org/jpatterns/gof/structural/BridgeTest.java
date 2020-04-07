@@ -1,5 +1,6 @@
 package org.jpatterns.gof.structural;
 
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.*;
 
 import java.util.*;
@@ -14,7 +15,8 @@ public class BridgeTest {
   ListImplementor list1;
   ListImplementor list2;
 
-  @BridgePattern.Implementor(participants = ListLayout.class)
+  @BridgePattern.Implementor(participants = ListLayout.class,
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private interface ListImplementor {
     int getSize();
 
@@ -23,7 +25,7 @@ public class BridgeTest {
     void addItem(String _item);
   }
 
-  @BridgePattern.ConcreteImplementor
+  @BridgePattern.ConcreteImplementor(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class SomeList implements ListImplementor {
     private List<String> items = new ArrayList<>();
 
@@ -40,7 +42,7 @@ public class BridgeTest {
     }
   }
 
-  @BridgePattern.ConcreteImplementor
+  @BridgePattern.ConcreteImplementor(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class UppercaseList extends SomeList {
 
     public void addItem(String _item) {
@@ -48,7 +50,8 @@ public class BridgeTest {
     }
   }
 
-  @BridgePattern.Abstraction(participants = ListImplementor.class)
+  @BridgePattern.Abstraction(participants = ListImplementor.class,
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class ListLayout {
     protected ListImplementor implementor;
 
@@ -67,7 +70,7 @@ public class BridgeTest {
     }
   }
 
-  @BridgePattern.RefinedAbstraction
+  @BridgePattern.RefinedAbstraction(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class NumberedListLayout extends ListLayout {
 
     @Override

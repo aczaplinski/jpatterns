@@ -1,14 +1,19 @@
 package org.jpatterns.validator;
 
+import org.jpatterns.gof.behavioral.CommandPattern;
 import org.jpatterns.gof.behavioral.IteratorPattern;
 import org.jpatterns.gof.structural.DecoratorPattern;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
 import java.io.FilterInputStream;
 import java.io.FilterOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,7 +44,10 @@ class HardcodedAnnotations {
                     Map.entry(InputStream.class, Set.of(DecoratorPattern.Component.class)),
                     Map.entry(FilterInputStream.class, Set.of(DecoratorPattern.ConcreteDecorator.class)),
                     Map.entry(OutputStream.class, Set.of(DecoratorPattern.Component.class)),
-                    Map.entry(FilterOutputStream.class, Set.of(DecoratorPattern.ConcreteDecorator.class))
+                    Map.entry(FilterOutputStream.class, Set.of(DecoratorPattern.ConcreteDecorator.class)),
+                    Map.entry(ActionListener.class, Set.of(CommandPattern.Command.class)),
+                    Map.entry(Desktop.Action.class, Set.of(CommandPattern.Command.class)),
+                    Map.entry(AbstractAction.class, Set.of(CommandPattern.Command.class))
             ).collect(Collectors.toMap(
                     entry -> entry.getKey().getName(),
                     Map.Entry::getValue

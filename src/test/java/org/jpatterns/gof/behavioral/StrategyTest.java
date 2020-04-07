@@ -1,6 +1,8 @@
 package org.jpatterns.gof.behavioral;
 
 import static org.junit.Assert.assertEquals;
+
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.Test;
 
 import java.util.zip.Adler32;
@@ -10,7 +12,7 @@ import java.util.zip.Adler32;
  * @since 2010-08-09
  */
 public class StrategyTest {
-  @StrategyPattern.Strategy
+  @StrategyPattern.Strategy(validationErrorLevel = ValidationErrorLevel.ERROR)
   private interface Checksum {
     void update(int b);
 
@@ -23,7 +25,7 @@ public class StrategyTest {
     void reset();
   }
 
-  @StrategyPattern.ConcreteStrategy
+  @StrategyPattern.ConcreteStrategy(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class MyAdler32 implements Checksum {
     private final Adler32 delegate = new Adler32();
 
@@ -48,7 +50,7 @@ public class StrategyTest {
     }
   }
 
-  @StrategyPattern.ConcreteStrategy
+  @StrategyPattern.ConcreteStrategy(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class Heinz57 implements Checksum {
     private long value = 57;
 

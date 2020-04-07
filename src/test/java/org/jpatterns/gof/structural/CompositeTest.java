@@ -1,13 +1,15 @@
 package org.jpatterns.gof.structural;
 
 import static junit.framework.Assert.assertEquals;
+
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.Test;
 
 import java.util.*;
 
 public class CompositeTest {
-  @CompositePattern.Component(participants = {DistributionList.class,
-      Person.class})
+  @CompositePattern.Component(participants = {DistributionList.class, Person.class},
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private static abstract class Contact {
     public abstract void sendMail(String msg);
 
@@ -18,7 +20,7 @@ public class CompositeTest {
     }
   }
 
-  @CompositePattern.Leaf
+  @CompositePattern.Leaf(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class Person extends Contact {
     private String lastMsg;
     private final String email;
@@ -37,9 +39,10 @@ public class CompositeTest {
     }
   }
 
-  @CompositePattern.Composite(comment = "bla bla bla")
+  @CompositePattern.Composite(comment = "bla bla bla",
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class DistributionList extends Contact {
-    private final Collection<Contact> contacts = new ArrayList<Contact>();
+    private final Collection<Contact> contacts = new ArrayList<>();
 
     public void sendMail(String msg) {
       for (Contact contact : contacts) {

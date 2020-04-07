@@ -1,22 +1,24 @@
 package org.jpatterns.plopd;
 
 import static junit.framework.Assert.assertEquals;
+
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.Test;
 
 public class NullObjectTest {
-  @NullObjectPattern.AbstractObject
+  @NullObjectPattern.AbstractObject(validationErrorLevel = ValidationErrorLevel.ERROR)
   private interface Policy {
     float calculateInterest();
   }
 
-  @NullObjectPattern.NullObject
+  @NullObjectPattern.NullObject(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class NullPolicy implements Policy {
     public float calculateInterest() {
       return 0.0f;
     }
   }
 
-  @NullObjectPattern.RealObject
+  @NullObjectPattern.RealObject(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class RealPolicy implements Policy {
     public float calculateInterest() {
       return 12.4f;

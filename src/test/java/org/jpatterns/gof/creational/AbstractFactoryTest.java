@@ -1,5 +1,6 @@
 package org.jpatterns.gof.creational;
 
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -11,69 +12,75 @@ import static junit.framework.Assert.assertEquals;
 public class AbstractFactoryTest {
   private String configuredLocale;
 
-  @AbstractFactoryPattern.AbstractProduct(participants = AbstractLocalizedAnimalFactory.class)
+  @AbstractFactoryPattern.AbstractProduct(participants = AbstractLocalizedAnimalFactory.class,
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private interface LocalizedAnimal {
     String talk();
   }
 
-  @AbstractFactoryPattern.ConcreteProduct
+  @AbstractFactoryPattern.ConcreteProduct(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class DutchCat implements LocalizedAnimal {
     public String talk() {
       return "Miauw";
     }
   }
 
-  @AbstractFactoryPattern.ConcreteProduct
+  @AbstractFactoryPattern.ConcreteProduct(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class EnglishCat implements LocalizedAnimal {
     public String talk() {
       return "Meow";
     }
   }
 
-  @AbstractFactoryPattern.ConcreteProduct
+  @AbstractFactoryPattern.ConcreteProduct(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class DutchChicken implements LocalizedAnimal {
     public String talk() {
       return "Tok tok";
     }
   }
 
-  @AbstractFactoryPattern.ConcreteProduct
+  @AbstractFactoryPattern.ConcreteProduct(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class EnglishChicken implements LocalizedAnimal {
     public String talk() {
       return "Cluck cluck";
     }
   }
 
-  @AbstractFactoryPattern.AbstractFactory(participants = LocalizedAnimal.class)
+  @AbstractFactoryPattern.AbstractFactory(participants = LocalizedAnimal.class,
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private interface AbstractLocalizedAnimalFactory {
-    @AbstractFactoryPattern.FactoryMethod
+    @AbstractFactoryPattern.FactoryMethod(validationErrorLevel = ValidationErrorLevel.ERROR)
     LocalizedAnimal createCat();
 
-    @AbstractFactoryPattern.FactoryMethod
+    @AbstractFactoryPattern.FactoryMethod(validationErrorLevel = ValidationErrorLevel.ERROR)
     LocalizedAnimal createChicken();
   }
 
-  @AbstractFactoryPattern.ConcreteFactory
+  @AbstractFactoryPattern.ConcreteFactory(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class DutchAnimalFactory implements AbstractLocalizedAnimalFactory {
-    @AbstractFactoryPattern.FactoryMethod
+    @AbstractFactoryPattern.FactoryMethod(validationErrorLevel = ValidationErrorLevel.ERROR)
+    @Override
     public LocalizedAnimal createCat() {
       return new DutchCat();
     }
 
-    @AbstractFactoryPattern.FactoryMethod
+    @AbstractFactoryPattern.FactoryMethod(validationErrorLevel = ValidationErrorLevel.ERROR)
+    @Override
     public LocalizedAnimal createChicken() {
       return new DutchChicken();
     }
   }
 
-  @AbstractFactoryPattern.ConcreteFactory
+  @AbstractFactoryPattern.ConcreteFactory(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class EnglishAnimalFactory implements AbstractLocalizedAnimalFactory {
-    @AbstractFactoryPattern.FactoryMethod
+    @AbstractFactoryPattern.FactoryMethod(validationErrorLevel = ValidationErrorLevel.ERROR)
+    @Override
     public LocalizedAnimal createCat() {
       return new EnglishCat();
     }
 
-    @AbstractFactoryPattern.FactoryMethod
+    @AbstractFactoryPattern.FactoryMethod(validationErrorLevel = ValidationErrorLevel.ERROR)
+    @Override
     public LocalizedAnimal createChicken() {
       return new EnglishChicken();
     }

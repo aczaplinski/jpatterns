@@ -1,5 +1,6 @@
 package org.jpatterns.gof.structural;
 
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -9,12 +10,13 @@ import static org.junit.Assert.assertEquals;
  * @since 2010-09-10
  */
 public class DecoratorTest {
-  @DecoratorPattern.Component(participants = HTMLDecorator.class)
+  @DecoratorPattern.Component(participants = HTMLDecorator.class,
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private interface HTMLContent {
     String getContent();
   }
 
-  @DecoratorPattern.ConcreteComponent
+  @DecoratorPattern.ConcreteComponent(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class SimpleHTMLContent implements HTMLContent {
 
     private String content;
@@ -28,7 +30,8 @@ public class DecoratorTest {
     }
   }
 
-  @DecoratorPattern.Decorator(participants = HTMLContent.class)
+  @DecoratorPattern.Decorator(participants = HTMLContent.class,
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   private static abstract class HTMLDecorator implements HTMLContent {
     protected HTMLContent htmlContent;
 
@@ -55,7 +58,7 @@ public class DecoratorTest {
 
   }
 
-  @DecoratorPattern.ConcreteDecorator
+  @DecoratorPattern.ConcreteDecorator(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class BoldDecorator extends HTMLDecorator {
     protected BoldDecorator(HTMLContent _content) {
       super(_content);
@@ -68,7 +71,7 @@ public class DecoratorTest {
     }
   }
 
-  @DecoratorPattern.ConcreteDecorator
+  @DecoratorPattern.ConcreteDecorator(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class SpanDecorator extends HTMLDecorator {
     protected SpanDecorator(HTMLContent _content) {
       super(_content);

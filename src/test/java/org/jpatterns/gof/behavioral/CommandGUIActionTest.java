@@ -1,5 +1,6 @@
 package org.jpatterns.gof.behavioral;
 
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.Test;
 
 import javax.swing.*;
@@ -11,14 +12,14 @@ import java.awt.event.ActionEvent;
  * @since 2010-08-09
  */
 public class CommandGUIActionTest {
-  @CommandPattern.Invoker
+  @CommandPattern.Invoker(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class MyButton extends JButton {
     public MyButton(javax.swing.Action a) {
       super(a);
     }
   }
 
-  @CommandPattern.ConcreteCommand(participants = MyReceiver.class)
+  @CommandPattern.ConcreteCommand(participants = MyReceiver.class, validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class FooAction extends AbstractAction {
     private final MyReceiver receiver;
 
@@ -32,7 +33,7 @@ public class CommandGUIActionTest {
     }
   }
 
-  @CommandPattern.ConcreteCommand
+  @CommandPattern.ConcreteCommand(validationErrorLevel = ValidationErrorLevel.ERROR)
   private static class BarAction extends AbstractAction {
     private final MyReceiver receiver;
 

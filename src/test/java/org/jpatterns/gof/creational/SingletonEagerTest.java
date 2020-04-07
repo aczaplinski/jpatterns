@@ -1,17 +1,20 @@
 package org.jpatterns.gof.creational;
 
 import static junit.framework.Assert.assertNotNull;
+
+import org.jpatterns.core.ValidationErrorLevel;
 import org.junit.Test;
 
 public class SingletonEagerTest {
-  @SingletonPattern.Singleton(variation = SingletonPattern.Variation.EAGER)
+  @SingletonPattern.Singleton(variation = SingletonPattern.Variation.EAGER,
+    validationErrorLevel = ValidationErrorLevel.ERROR)
   public static class EagerSingleton {
     private final static EagerSingleton INSTANCE = new EagerSingleton();
 
     private EagerSingleton() {
     }
 
-    @SingletonPattern.SingletonMethod
+    @SingletonPattern.SingletonMethod(validationErrorLevel = ValidationErrorLevel.ERROR)
     public static EagerSingleton getInstance() {
       return INSTANCE;
     }
